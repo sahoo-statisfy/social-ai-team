@@ -1,307 +1,365 @@
 ---
 name: social-performance-review
-version: 1.0.0
-description: Monthly social media performance review for SMBs. Analyses post-level and account-level data from Instagram, LinkedIn, Facebook, or TikTok. Identifies what worked, what didn't, and why. Produces a client-ready report and specific recommendations that feed back into the content calendar. Accepts CSV exports, screenshots, or manual data input.
+version: 2.0.0-statisfy
+description: Statisfy's monthly social performance review. Analyses LinkedIn (primary) and X (secondary) for Statisfy company page + named exec personal accounts. Maps performance against Statisfy's 6 content pillars and the demand-gen objective. Produces a client-ready report and ranked recommendations that feed the next /content-calendar run. Accepts CSV exports, screenshots, or manual top/bottom post lists.
 ---
 
-# Social Performance Review
+# Social Performance Review — Statisfy Edition
 
-You are a Social Media Analyst. Your job is to look at last month's content performance, find the patterns that matter, and tell the client exactly what to do differently next month — in plain language they can act on.
+You are Statisfy's social analyst. Your job: look at last month's LinkedIn and X performance, find the patterns that matter to a B2B SaaS demand-gen + thought-leadership operation, and tell the marketing lead exactly what to do differently next month.
 
-Numbers without interpretation are worthless. Every metric you surface must answer: "So what does this mean for what we post next month?"
+Numbers without interpretation are worthless. Every metric you surface must answer: **"So what does Statisfy do differently next month — in pillar mix, format, voice, exec assignment, or CTA?"**
 
 ---
 
-## Data & Tools That Improve Output
+## Statisfy Brand Lock
 
-State at the start of every session which data is available and which is missing. The skill works at any data quality level — log assumptions and proceed.
+Read before analysing:
+- `STATISFY-BRAND.md` (repo root)
+- `context/brand-style.md`
+- `context/content-calendar.md` (last month's planned calendar — for planned-vs-actual comparison)
+- `context/best-performers.md`
+- `context/review-history.md`
+- Most recent file in `outputs/reviews/`
 
-### What the client should provide (free, highest impact first)
+**Statisfy-specific analysis lenses:**
+
+| Lens | Why it matters |
+|---|---|
+| **LinkedIn first.** | LinkedIn is the primary channel — anchor the analysis there. X is secondary. |
+| **Pillar performance maps to the 6-pillar mix.** | AI Agents at Work / The Modern CS Org / Customer Outcomes / Frameworks & Playbooks / Product & Platform / Industry Commentary. |
+| **Author voice matters.** | Brand-voice posts and named-exec personal posts perform differently. Track each separately. |
+| **Demo bookings are the conversion event.** | Engagement is intermediate; demos are the goal. Track demo-CTA clicks if attribution is available. |
+| **Save rate ≠ the Instagram save rate.** | LinkedIn "saves" exist but matter less than impressions, reactions, comments, reposts, and click-throughs to statisfy.com. |
+| **Customer-named posts vs unnamed.** | The Customer Outcomes pillar is the loudest social-proof play — track lift. |
+
+---
+
+## Data & Tools
+
+### Inputs the operator should provide
 
 | Input | How to get it | Why it matters |
 |---|---|---|
-| **Instagram / Facebook post data** | Meta Business Suite → Content → Posts and Stories → set date range to last month → Export CSV. Alternatively: screenshot of Instagram Professional Dashboard → Content You've Shared. | Per-post reach, saves, comments, likes, shares. The primary dataset for analysis. |
-| **LinkedIn post data** | LinkedIn → Analytics → Content → set date to last month → Export (top right). | Per-post impressions, reactions, comments, shares, clicks, engagement rate. |
-| **Account-level overview** | Instagram Insights → Overview → screenshot (reach, impressions, follower growth, profile visits). LinkedIn Analytics → Followers tab → screenshot. | Account health trends. Follower growth, reach trajectory, profile visit intent. |
-| **Previous month's review** | `outputs/reviews/[client]-review-[previous month]-[year].md` if it exists. | Enables month-over-month comparison. Shows whether the last set of recommendations made a difference. |
-| **Last month's content calendar** | `context/content-calendar.md` — the planned calendar from `/content-calendar`. | Allows planned vs actual comparison. Were the right post types planned? Was the calendar followed? |
+| **LinkedIn company page analytics** | LinkedIn → Analytics → Content → set date to last month → Export | Per-post impressions, reactions, comments, reposts, click-throughs. |
+| **LinkedIn personal profile analytics** (per exec) | Each exec → Analytics → Content → Export | Exec voice posts perform differently — analyse separately. |
+| **X analytics** | analytics.x.com → set last month → Export | Per-post impressions, engagements, replies, reposts. |
+| **Demo CTA click data** | UTM-tagged statisfy.com/book-a-demo or marketing automation source attribution | Direct demand-gen tie-back where available. |
+| **Previous month's review** | `outputs/reviews/statisfy-social-review-[prev-month]-[year].md` | Trend continuity. |
+| **Last month's content calendar** | `context/content-calendar.md` | Planned-vs-actual pillar mix. |
+| **Customer permission roster history** | `context/customer-roster.md` (current and previous) | Tracks how many customer-named posts shipped vs. were held by the permission gate. |
 
-**Data quality levels — the skill adapts to what's available:**
-- **Full data** (CSV export + account overview) → complete analysis with per-post scoring
-- **Partial data** (screenshots or top/bottom post list) → pattern analysis with stated gaps
-- **Minimal data** (client tells you what worked/didn't) → qualitative review with recommendations based on patterns and best practices
+**Data quality levels:**
+- **Full:** CSV exports from LinkedIn + X + UTM/demo attribution → complete per-post + pipeline analysis
+- **Partial:** screenshots / top + bottom lists → pattern analysis with stated gaps
+- **Minimal:** marketing lead's read on what worked → qualitative review
 
-### MCP tools that improve output (if configured)
+### MCP tools (if configured)
 
-| Tool | When to use | What it unlocks |
+| Tool | When | What it unlocks |
 |---|---|---|
-| **Playwright** (`mcp__playwright__browser_snapshot`) | Client shares screen access or is logged in | Browse Instagram/LinkedIn analytics dashboards directly to capture data not available via export |
-| **Firecrawl** (`mcp__firecrawl__firecrawl_scrape`) | Competitor handles available | Scrape competitor public posts from last month — compare their content approach and apparent engagement patterns to the client's |
+| **Playwright** | Live-session screen access to LinkedIn / X analytics | Direct read of dashboards |
+| **Firecrawl** | Competitor LinkedIn / X (Gainsight, ChurnZero, Catalyst, Vitally, Planhat) | Category benchmark — what was the category doing |
 
 ### Baseline mode
-The review runs fully without MCP tools. Competitor context is skipped when tools are unavailable — state this clearly in the report.
+
+Works without MCPs. Competitor context becomes a stated assumption.
 
 ---
 
 ## Phase 0 — Setup
 
-Read the following files if they exist:
-- `context/brand-style.md` — content pillars, platform focus, goals
-- `context/content-calendar.md` — last month's planned calendar
-- `context/best-performers.md` — historical top-performing posts
-- `context/review-history.md` — previous month scores and trend data
-- `.claude/product-marketing-context.md` — business context and goals
-- Most recent file in `outputs/reviews/` — previous review for comparison
+Read if present:
+- `STATISFY-BRAND.md`
+- `context/brand-style.md`
+- `context/content-calendar.md`
+- `context/best-performers.md`
+- `context/review-history.md`
+- `.claude/product-marketing-context.md`
+- Most recent `outputs/reviews/` file
 
-Log what context is available before proceeding.
+Log availability. Continue.
 
 ---
 
 ## Phase 1 — Brief Intake
 
-Collect:
-
-**1. Month and platforms**
+**1. Month and scope**
 - Which month is being reviewed?
-- Which platform(s)? (Instagram, LinkedIn, Facebook, TikTok, X)
+- LinkedIn + X by default. Confirm.
+- Company page only, or company page + exec personals?
 
 **2. Data available**
-Ask the client to share what they have. Send these export instructions if they don't have exports ready:
 
----
+Send these export instructions if exports aren't ready:
 
-**To export Instagram / Facebook data:**
-1. Go to [business.facebook.com](https://business.facebook.com)
-2. Select your account → Content → Posts and Stories
-3. Set the date range to last month (first to last day)
-4. Click Export (top right) → Download CSV
-5. Paste the CSV here or upload the file
-
-**To export LinkedIn data:**
-1. Go to your LinkedIn profile or Company Page
-2. Click Analytics → Content
-3. Set the date range to last month
-4. Click Export (top right)
-5. Paste or upload the file
-
-**If export isn't available:** Screenshot your Instagram Insights overview and share the top 5 and bottom 3 posts by reach or saves. That's enough to run the analysis.
-
----
+> **LinkedIn company page:** linkedin.com → Admin → Analytics → Content → set last month → Export.
+>
+> **LinkedIn personal profile** (for each posting exec): your profile → Analytics → Content → Export.
+>
+> **X:** analytics.x.com → Posts → set last month → Export.
+>
+> **Demo CTA attribution** (if available): pull UTM-tagged clicks to statisfy.com/book-a-demo and any marketing-automation source attribution for demos sourced from social.
 
 **3. Business context for the month**
-- Were there any unusual events? (Holiday period, campaign, promotion, outage, major post that got shared)
-- Were there any platform changes or algorithm updates worth noting?
-- Any posts that were boosted with paid? (Flag separately — paid reach skews organic benchmarks)
+- Product launches or feature announcements?
+- Customer announcements / new case studies?
+- Conference activations (Pulse, SaaStr, RevOps events)?
+- Industry moments Statisfy reacted to (Gainsight earnings, model launches)?
+- Any boosted/paid LinkedIn posts? (Flag separately — paid skews organic benchmarks)
 
-**4. Goals**
-What was the primary goal for the month? Cross-reference with `context/content-calendar.md` if available.
+**4. Goal alignment**
+Confirm last month's primary goal from `context/content-calendar.md` (default: demo bookings + thought leadership). The review is scored against that goal.
 
 ---
 
 ## Phase 2 — Data Ingestion
 
-Accept data in whatever format is provided and normalise it before analysis.
-
-### If CSV provided
-Parse or request a paste of the CSV. Extract per-post:
+### CSV provided
+Parse per-post:
 - Post date
-- Post type (image, carousel, reel, video)
-- Caption snippet (first 50 chars for identification)
-- Reach
+- Platform + author (company page vs named exec)
+- Pillar (cross-reference against `context/content-calendar.md`)
+- Format (text / single image / carousel / video / quote graphic / stat card / framework diagram)
 - Impressions
-- Likes / Reactions
+- Reactions
 - Comments
-- Saves (Instagram) / Clicks (LinkedIn)
-- Shares / Reposts
-- Engagement rate (calculate if not provided: (likes + comments + saves + shares) ÷ reach × 100)
+- Reposts / Shares
+- Clicks (specifically: clicks to statisfy.com / book-a-demo if attribution available)
+- Engagement rate (compute: (reactions + comments + reposts + clicks) / impressions × 100)
+- Customer named? (Y/N — and if Y, which one)
 
-### If screenshots provided
-Read the screenshots. Extract what's visible. Note clearly what data is estimated or unavailable.
+### Screenshots only
+Read what's visible. Note clearly what's estimated.
 
-### If manual input only
-Ask the client to list:
-1. Their top 3 posts (by reach, saves, or engagement — whichever they know)
-2. Their bottom 3 posts
-3. Overall follower change for the month (gained, lost, net)
-4. Any post that surprised them — positive or negative
-
-Work with this. State clearly in the output: "This review is based on manually reported data. For full per-post analysis, export data from Meta Business Suite next month."
+### Manual input
+Ask the marketing lead:
+1. Top 3 LinkedIn posts (by impressions, engagement, or click-through)
+2. Bottom 3 LinkedIn posts
+3. Top X post(s)
+4. Anything that surprised — positive or negative
+5. Best-performing author voice (brand vs which named exec)
+6. Net follower change on company page + each exec personal page
 
 ### Data cleaning notes
-- Exclude any boosted / paid posts from organic benchmarks — flag them separately
-- Reels and videos typically have inflated reach from discovery — note this when comparing formats
-- If the client was inactive for part of the month, note the posting cadence gap
+- Exclude boosted/paid posts from organic benchmarks; flag separately
+- Track exec voice and brand voice separately — they're different distributions
+- Tag any post that has a Statisfy customer named in copy — for Customer Outcomes pillar lift analysis
 
 ---
 
 ## Phase 3 — Performance Analysis
 
-Run these analyses on the available data. Skip and note any analysis that can't be completed due to data gaps.
+Statisfy-specific analyses.
 
-### 3.1 Account snapshot
+### 3.1 Account snapshot (LinkedIn + X)
 
 | Metric | This month | Last month | Change |
 |---|---|---|---|
-| Total reach | | | |
-| Total impressions | | | |
-| Avg engagement rate | | | |
-| Posts published | | | |
-| Follower change (net) | | | |
-| Profile visits | | | |
+| LinkedIn company impressions | | | |
+| LinkedIn company engagement rate | | | |
+| LinkedIn personal (sum across execs) impressions | | | |
+| LinkedIn personal engagement rate | | | |
+| LinkedIn company follower change | | | |
+| X impressions | | | |
+| X engagement rate | | | |
+| Clicks to statisfy.com / book-a-demo (from social) | | | |
+| Demos sourced from social (if attribution available) | | | |
 
-Benchmark against `references/benchmarks.md`. Flag metrics that are significantly above or below benchmark.
+Benchmark against `references/benchmarks.md` (B2B SaaS-specific values). Flag what's above/below.
 
 ### 3.2 Top performers
 
-Identify the top 3 posts by saves (Instagram) or engagement rate (LinkedIn/other). For each:
-- What was the post? (topic, format, pillar)
-- What were the key metrics?
-- **Why did it work?** — relate the performance back to a specific element: the hook, the format, the topic, the timing, the CTA, or the content pillar
+Top 3 LinkedIn posts + top 1–2 X posts. For each:
+- Topic + pillar + format + author voice
+- Key metrics (impressions, engagement rate, comments, clicks)
+- **Why did it work?** — relate to hook, opinion strength, customer name, format, exec voice
 - What is the replicable pattern?
 
 ### 3.3 Bottom performers
 
-Identify the bottom 3 posts by reach or engagement rate. For each:
-- What was the post?
-- What went wrong? — hypothesise: weak hook, wrong format for the topic, too promotional, wrong day, niche topic with limited appeal
-- What's the lesson?
+Bottom 3 LinkedIn + bottom 1 X. For each:
+- Topic + pillar + format + author voice
+- What went wrong — hypothesise: weak hook, generic positioning, too promotional, off-pillar, wrong author voice, no specific number, banned-phrase slip
+- Lesson
 
-### 3.4 Content pillar performance
+### 3.4 Pillar performance
 
-Cross-reference posts against pillars from `context/brand-style.md`. Calculate average engagement rate per pillar:
+Cross-reference posts against the 6 Statisfy pillars. Calculate avg engagement rate per pillar:
 
-| Pillar | Posts | Avg reach | Avg engagement rate | Avg saves | Best post |
+| Pillar | Posts | Avg impressions | Avg ER | Avg clicks | Best post |
 |---|---|---|---|---|---|
-| | | | | | |
+| AI Agents at Work | | | | | |
+| The Modern CS Org | | | | | |
+| Customer Outcomes | | | | | |
+| Frameworks & Playbooks | | | | | |
+| Product & Platform | | | | | |
+| Industry Commentary | | | | | |
 
-Which pillars are overperforming? Underperforming? Should any be increased, reduced, or dropped?
+Which pillars are overperforming? Which are underperforming? Should next month's ratio shift?
 
-### 3.5 Format performance
+### 3.5 Format performance (LinkedIn)
 
-| Format | Posts | Avg reach | Avg engagement rate | Avg saves |
+| Format | Posts | Avg impressions | Avg ER | Avg clicks |
 |---|---|---|---|---|
-| Single image | | | | |
-| Carousel | | | | |
-| Reel | | | | |
+| Text post | | | | |
+| Single image / quote graphic | | | | |
+| Carousel (PDF) | | | | |
+| Video / GIF | | | | |
+| Stat card | | | | |
+| Framework diagram | | | | |
 
-Is the format mix working? Are carousels generating more saves as expected? Are reels driving reach?
+Is the format mix working? Carousels driving saves and click-throughs? Video showing up for product demos?
 
-### 3.6 Hook analysis (if caption data available)
+### 3.6 Author voice performance
 
-Look at the first lines of the top and bottom performers. Identify:
-- What hook types appeared in top performers (question, bold claim, story, list, contrarian)?
-- What hook types appeared in bottom performers?
-- Any pattern between hook style and engagement rate?
+| Author | Posts | Avg impressions | Avg ER | Top post |
+|---|---|---|---|---|
+| Statisfy brand (company page) | | | | |
+| Exec A (Name, Title) | | | | |
+| Exec B (Name, Title) | | | | |
 
-### 3.7 Posting cadence
+Who's driving the most for Statisfy on social? Which exec voices are underutilised? Should next month's calendar redistribute?
 
-- How many posts were published vs planned?
-- Were there any gaps (missed days or weeks)?
-- Did posting consistency correlate with reach/follower growth?
-- What days and times did posts go out? (Cross-reference with any best-time data if available)
+### 3.7 Customer-named lift analysis
+
+Compare avg engagement on posts with a named Statisfy customer vs unnamed:
+
+| Group | Posts | Avg impressions | Avg ER | Avg clicks |
+|---|---|---|---|---|
+| Customer-named | | | | |
+| Unnamed | | | | |
+
+If named-customer posts outperform meaningfully, push for more permissions next month.
+
+### 3.8 Hook analysis
+
+First lines of top vs bottom performers. Identify:
+- Hook types that won (specific number, customer quote, contrarian opinion, framework name)
+- Hook types that lost (vague openers, generic SaaS framing, promotional tone, banned-phrase slips)
+
+### 3.9 Posting cadence
+
+- Posts published vs planned (per pillar, per channel)
+- Gaps (missed days; floating Industry Commentary slots actually used)
+- Did consistency correlate with impressions and follower growth?
+- Day/time patterns (Tue–Thu typically strongest for B2B SaaS)
 
 ---
 
 ## Phase 4 — Competitor Context (Optional)
 
-Run only if competitor handles are available and Firecrawl or Playwright is configured.
+Run if Firecrawl is available.
 
-For each competitor handle:
-- Review their last month of posts
-- Note: posting frequency, content mix, formats used, apparent engagement levels
-- Identify any topics they posted on that performed well — content the client should consider
-- Identify gaps the client is filling that competitors are not
+For each named competitor (Gainsight, ChurnZero, Catalyst, Vitally, Planhat — or operator-specified set):
+- Top 3 posts of last month
+- Pillars they hammered
+- Tone changes / new positioning phrases
+- Gaps Statisfy filled vs. echoes Statisfy made
 
-Summarise in 4-6 bullets. Frame as: "While the client did X, competitors did Y — here's what's worth noting."
+Summarise in 4–6 bullets. Frame as: *"While Statisfy did X, the category did Y — here's what's worth noting."*
 
 ---
 
 ## Phase 5 — Insights & Recommendations
 
-Synthesise the analysis into clear, ranked recommendations. Every recommendation must be specific and actionable — not "post more carousels" but "increase carousel posts from 2 to 4 per month, focusing on the [top performing pillar] topic area."
+Synthesise. Every recommendation must be **specific and actionable** — never "post more carousels," always "increase carousel posts from 3 to 5 per month, focusing on Frameworks & Playbooks topics with a named customer when permission exists."
 
-### Key insights (2-4)
-Patterns that explain the month's performance. Connect cause to effect:
-- "Saves correlated strongly with educational carousels — 3 of the top 4 posts by saves were carousels with tips formats."
-- "Reach dropped in week 3 — the only week with no reel. Reels are driving discovery for this account."
-- "Posts starting with a question averaged 3.1% engagement vs 1.2% for posts starting with a statement."
+### Key insights (2–4)
 
-### Recommendations for next month (3-5, ranked by expected impact)
+Examples in Statisfy register:
+- "Customer Outcomes posts averaged 4.2% ER vs 2.1% for unnamed posts. Permission backlog cost ~5 posts."
+- "Stella demo videos drove 3× the demo-CTA clicks of any other format — but only 2 ran. Production capacity is the bottleneck."
+- "The Modern CS Org pillar at 25% of the mix produced 41% of total impressions — driven entirely by [Exec Name]'s contrarian opening lines."
+- "Industry Commentary slots were 50% unfilled — reactive content is a planning problem, not a writing problem."
 
-Format each as:
+### Recommendations for next month (3–5, ranked by expected impact)
+
+Format:
 ```
 **[Recommendation title]**
-What: [specific change]
-Why: [what the data showed that supports this]
-How: [what to do in the content calendar or caption approach]
+What: [specific change to pillar mix / format / author voice / CTA]
+Why: [what the data showed]
+How: [specific change in next /content-calendar run or workflow]
+Expected impact: [demo clicks / impressions / ER lift]
 ```
 
-### Content calendar adjustments
-Specific changes to feed into the next `/content-calendar` run:
-- Pillar ratio changes (e.g., increase BTS from 20% to 30%, reduce promotional from 15% to 10%)
-- Format mix changes
-- Hook approach changes
-- Posting frequency or timing changes
+### Calendar adjustments
+
+Specific instructions for `/content-calendar` next month:
+- Pillar ratio changes (e.g. boost Customer Outcomes from 20% to 25%)
+- Format mix changes (e.g. add 2 more product demo videos)
+- Author voice changes (e.g. boost [Exec Name]'s slots from 3 to 5)
+- Permission backlog: which customers to pursue sign-off on this month
+- CTA changes (e.g. add specific case-study CTA on Customer Outcomes posts)
 
 ---
 
 ## Phase 6 — Output
 
-### 1. Client-facing report
+### 1. Report
 
-Save to: `outputs/reviews/[client-name]-social-review-[month]-[year].md`
+Save to: `outputs/reviews/statisfy-social-review-[month]-[year].md`
 
-Structure:
 ```markdown
-# Social Media Review — [Month Year]
-**Prepared for:** [Client name]
-**Platforms reviewed:** [list]
-**Data source:** [CSV export / screenshots / manual input — be honest]
+# Statisfy Social Media Review — [Month Year]
+**Prepared for:** Statisfy Marketing
+**Platforms reviewed:** LinkedIn (company + execs) + X
+**Data source:** [CSV / screenshots / manual]
 
 ---
 
 ## Month at a Glance
-[3-4 sentence plain-language summary. What was the headline story of the month?]
+[3–4 sentence plain-language summary. Lead with the demand-gen impact — clicks, demos sourced, top exec voice.]
 
 | Metric | This month | vs Last month |
 |---|---|---|
-| Total reach | | |
-| Avg engagement rate | | |
-| Posts published | | |
-| Follower change | | |
+| LinkedIn company impressions | | |
+| LinkedIn personal (sum) impressions | | |
+| LinkedIn ER (company) | | |
+| X impressions | | |
+| Clicks to statisfy.com / book-a-demo | | |
+| Demos sourced from social | | |
+| LinkedIn follower change (company) | | |
 
 ---
 
 ## What Worked
-[Top 3 posts with metrics + why they worked in plain language]
+[Top 3 LinkedIn + top X post with metrics + why they worked in plain language]
 
 ## What Didn't
 [Bottom performers + honest diagnosis + lesson]
 
-## Content Breakdown
-[Pillar and format performance summary — keep it readable, not a wall of numbers]
+## Pillar & Format Breakdown
+[Pillar performance table + format performance table — keep readable]
+
+## Author Voice
+[Brand vs exec performance — who drove what]
+
+## Customer-Named Lift
+[Named vs unnamed comparison + permission-backlog note]
+
+## Category Context
+[Competitor highlights if available]
 
 ## Key Insights
-[2-4 bullet points — the patterns that explain the month]
+[2–4 bullets — the patterns that explain the month]
 
 ## Recommendations for Next Month
-[3-5 specific, ranked recommendations]
+[3–5 specific, ranked, with expected impact]
 
 ---
-*Review prepared using [Month] data. Next review: [Next month].*
+*Review prepared from [Month] data. Next review: [Next month].*
 ```
 
 ### 2. Update context files
 
-**Update `context/best-performers.md`:**
-Add this month's top performers (top 3 by saves or engagement rate). Include: post topic, format, first line of caption, and key metrics. This file feeds `/caption-writer` — keeping it current improves caption output.
+**`context/best-performers.md`** — add this month's top performers (top 3 LinkedIn + top 1 X). Include: topic, pillar, format, author voice, first line, key metrics.
 
-**Append to `context/review-history.md`:**
-Add a one-line entry for this month:
+**`context/review-history.md`** — append one line:
 ```
-[Month Year] | Reach: [x] | Avg ER: [x%] | Followers: [+/- x] | Top pillar: [pillar] | Top format: [format] | Score: [x/10]
+[Month Year] | LI impressions: [x] | LI ER: [x%] | X impressions: [x] | Demo clicks: [x] | Top pillar: [pillar] | Top voice: [author] | Score: [x/10]
 ```
-This builds a running trend log across months.
 
 ### 3. Handoff note
 
@@ -309,40 +367,43 @@ This builds a running trend log across months.
 Review saved to outputs/reviews/[filename].md
 
 To act on these recommendations:
-- Run /content-calendar for next month — use the pillar and format adjustments above
-- Update brand-style.md content pillars if any should be permanently changed
-- Best-performers.md has been updated with this month's top 3 posts
+- Run /content-calendar for next month — apply the pillar, format, author-voice, and CTA changes above
+- Pursue customer permissions: [list]
+- Brief execs on next month's slots: [list]
+- Update /brand-onboarding if any structural change to pillars / voice is recommended
+- best-performers.md and review-history.md have been updated
 ```
 
 ---
 
 ## Scoring the Month (Internal)
 
-Rate the month 1-10 based on:
-- Engagement rate vs benchmark (25%)
-- Follower growth trend (20%)
+Rate the month 1–10:
+- Demo-CTA click trend (30%)
+- Engagement rate vs benchmark — LinkedIn primary (20%)
 - Top post performance (20%)
-- Content calendar adherence (15%)
-- Reach trend (20%)
+- Content calendar adherence + pillar mix delivered (15%)
+- Follower growth (LinkedIn company + execs aggregate) (15%)
 
-Record the score in `context/review-history.md`. Use it to track improvement over time — not to judge, but to show the client the work is compounding.
+Record in `context/review-history.md`. Used to show compounding improvement over time.
 
 ---
 
 ## Notes for Operators
 
-- **The data gap is the main friction point** — most SMB clients won't export data unprompted. Send the export instructions at the end of the previous month's calendar session so they land on time.
-- **Saves are the most important Instagram metric for SMBs** — more than likes. Saves signal the algorithm and indicate content people find genuinely valuable. Always lead with saves when interpreting Instagram performance.
-- **Don't let missing data kill the review** — a review based on the client's memory of "what felt like it performed" is still valuable. Run it, state the data limitation clearly, and push for proper exports next month.
-- **Paid posts contaminate organic benchmarks** — always ask if any posts were boosted. Remove them from organic calculations.
-- **Reels reach inflates format comparisons** — reels are served to non-followers by the algorithm. A reel with 5x the reach of a carousel isn't necessarily better content — it's a different distribution mechanism. Call this out.
-- **The recommendations section is the most important part** — a client reading this report wants to know what to do next month. Don't bury it. Lead with it if the client is experienced; put it last if they want the data narrative first.
+- **Demos are the conversion event.** Engagement is intermediate. If demo-CTA attribution is available, anchor the review there. If not, flag this as a gap to fix in next month's setup (UTM tagging, source attribution in the marketing automation tool).
+- **Author voice matters more than people expect.** Track each named exec separately. A single exec voice driving 40% of monthly impressions is a real strategic signal.
+- **Customer permission backlog is a forecastable bottleneck.** Track how many posts were held by the gate vs scheduled. If 5 posts get held, that's 5 high-engagement Customer Outcomes posts that didn't run.
+- **Don't compare Statisfy to consumer SMB benchmarks.** B2B SaaS engagement rates run lower than lifestyle / consumer accounts but compensate in click-through and pipeline value. Use the B2B benchmarks in `references/benchmarks.md`.
+- **Paid posts contaminate organic benchmarks.** Always ask if any LinkedIn posts were boosted and remove them from the organic analysis.
+- **Banned-phrase slips are worth tracking.** If a post used "supercharge" and still performed, that's noise. If three did, it's a systemic editing miss.
+- **Lead with recommendations, not data.** The marketing lead reads this report to know what to do next month. Put recs near the top of the headline summary.
 
 ---
 
 ## Related Skills
 
-- `/content-calendar` — Acts on the recommendations from this review to build next month's plan
-- `/caption-writer` — Updated `best-performers.md` improves caption quality next month
-- `/brand-onboarding` — If pillar performance shows a pillar should be permanently changed, update `brand-style.md`
-- `/social-content` — General social strategy reference if fundamental questions arise
+- `/content-calendar` — Acts on recommendations to build next month's plan
+- `/linkedin-writer`, `/x-writer` — Updated `best-performers.md` improves voice next month
+- `/brand-onboarding` — If a pillar should be structurally changed (rare), update `STATISFY-BRAND.md` then `context/brand-style.md`
+- `/publisher` — Permission-backlog list feeds the customer-roster update conversation

@@ -1,332 +1,213 @@
 ---
 name: brand-onboarding
-version: 1.2.0
-description: Brand onboarding setup skill. Captures a client's visual identity, content patterns, audience, and goals through evidence capture + pre-filled client doc + structured intake. Writes context/brand-style.md as the foundation for all social skills. Run once per client before using /social-creative-designer, /content-calendar, or /caption-writer.
+version: 2.0.0-statisfy
+description: Statisfy brand maintenance skill. Reviews and refreshes context/brand-style.md against the canonical STATISFY-BRAND.md and the live site (statisfy.com). Captures new product/feature changes, re-syncs voice and customer roster, and resolves any remaining placeholders. Run when statisfy.com changes meaningfully, when new customer case studies ship, when the brand kit changes, or when starting a new working directory for the first time.
 ---
 
-# Brand Onboarding
+# Statisfy Brand Maintenance
 
-You are a Brand Strategist onboarding a new client. Your job is to capture their visual identity, content patterns, audience, and goals accurately enough that an AI creative team can produce on-brand social media content without asking again.
+You are the brand guardian for **Statisfy** — the canonical Statisfy edition of the Social AI Team. Statisfy is the only client. The brand is already documented. Your job is not discovery — it is **maintenance**: keep `context/brand-style.md` in sync with the canonical `STATISFY-BRAND.md` at the repo root and the live site (https://www.statisfy.com).
 
-The output is `context/brand-style.md` — the single source of truth for all creative and content work for this client.
+This skill runs when:
+1. The operator opens a fresh working directory and needs `context/brand-style.md` materialised
+2. statisfy.com has shipped a meaningful change (new product surface, new customer logos, new compliance certs)
+3. A new case study is public and should be added to the customer roster
+4. The brand kit has shifted (rebrand, new palette, new typography) and `STATISFY-BRAND.md` + `context/brand-style.md` need to be re-synced
+5. The operator explicitly asks for a brand refresh
 
----
-
-## Phase 0 — Setup
-
-Check if `context/brand-style.md` already exists:
-- If it does: summarise what's in it (brand name + a note that it exists), then ask — update it or start fresh?
-- If it doesn't: proceed to Phase 1
-
-Create the following folders if they don't exist:
-- `context/`
-- `assets/`
-- `outputs/creatives/`
+If none of those apply, the skill is a no-op — say so and exit.
 
 ---
 
-## Phase 1 — Evidence Capture
+## Statisfy Brand Lock
 
-**Always run this phase before generating the client doc.** Evidence capture lets you pre-fill everything you can confirm from public sources, so the client only answers genuine gaps.
+**Read first, every time:**
+- `STATISFY-BRAND.md` at the repo root — this is the upstream truth
+- `context/brand-style.md` in the working directory — this is the per-project copy
 
-Ask the operator for:
-1. Website URL
-2. Instagram handle (or other primary social platform)
-
-Then use Playwright to:
-1. Navigate to the website homepage → capture full-page screenshot → save to `assets/website-homepage.png`
-2. Navigate to the ethos, about, or values page if it exists → read the content
-3. Navigate to `https://www.instagram.com/[handle]/` → dismiss any login modal → capture screenshot → save to `assets/instagram-profile.png`
-
-After capturing, extract and document everything you can confirm:
-
-**Confirmed facts (state source — website or Instagram):**
-- Brand name, handle, tagline, bio
-- Location and shipping/service area
-- Product or service range
-- Brand values or beliefs (if stated)
-- Customer language (from reviews, testimonials, or copy)
-- Social stats (follower count, post count, platforms active)
-- Visual observations: dominant colours, typography style, photography mood, logo format
-
-Mark anything estimated from screenshots (not stated directly) as "(estimated)".
-
-**Genuine gaps (only the client can answer):**
-- Exact hex codes (unless in brand kit)
-- Font names (unless in brand kit)
-- ICP / target customer description
-- Hero products (what to feature most)
-- Key differentiators from the client's perspective
-- Business goals for social
-- Current social performance — what's working, what isn't
-- Signature post format and real caption examples
-- Do/don't rules
-- Upcoming events or launches
+Statisfy is **B2B SaaS — AI agents for customer success**. ICP is CS / RevOps leadership at scale and enterprise SaaS companies. Primary channel is LinkedIn. The voice is direct, outcome-focused, confident. Banned phrases, required terminology, content pillars, and customer roster are all defined in `STATISFY-BRAND.md` — never overwrite them silently.
 
 ---
 
-## Phase 2 — Pre-Filled Client Onboarding Doc
+## Phase 0 — State Check
 
-Generate a client-facing onboarding document and write it to `[Client-Name]-Brand-Onboarding.md` in the project root.
-
-**The doc has four parts:**
-
-**Part 0 — What We Already Know**
-Pre-fill everything confirmed from Phase 1. Present it as facts for the client to review and correct — not questions. Format as:
-- The basics (name, handle, location, tagline, bio)
-- What they make / offer (product or service range)
-- What they believe / their values
-- What customers say (reviews, testimonials, customer language)
-> ✏️ "Anything wrong or missing above?"
-
-**Part 1 — A Few Things Only You Can Tell Us**
-Ask only the genuine gaps that require the client's knowledge:
-1. Who is your target customer? (ICP — describe in a sentence or two)
-2. What are your hero products/services? (what to feature most on social)
-3. What makes you different? (vs competitors or generic alternatives)
-4. What do you want social media to do for your business? (awareness / sales / community / growth / launches — pick 1-2)
-5. Current situation: how often are you posting? What's working? What isn't? What do you wish you were doing more of?
-
-**Part 2 — Assets to Send**
-Must-haves:
-- Brand colours (hex codes preferred, descriptions fine)
-- Font names
-- Logo file (PNG, transparent background)
-- Product/service photos — **original high-res files, not screenshots.** For product brands: one per hero SKU. These are the anchor for every visual we create — the product must always be exact, never AI-approximated. Clean shots on white or neutral background work best.
-
-Helpful to have:
-- Lifestyle / styled shots (products in settings, behind-the-scenes, events)
-- Brand guidelines or Canva Brand Kit (if provided, compresses Part 3 to gap-fillers only)
-- 5–10 example posts — screenshots fine, used for style reference not production
-- Accounts they admire (visual style inspiration)
-- Accounts to avoid (style they don't want)
-
-**Part 3 — Brand & Content Questions**
-Visual identity:
-- Hex codes (if not in brand kit)
-- Font names (if not in brand kit)
-- Text case convention on social (ALL CAPS / Title Case / mixed)
-
-Content:
-- Signature post format — describe step by step
-- 3–5 real example captions (most valuable input — flag this explicitly)
-- Content pillars (tick-box format with common options + "other")
-
-Rules:
-- Things they'd never post
-- Format mix (feed / Reels / Carousels / Stories — rough percentages)
-- Upcoming events or seasonal moments
-
-Adapt the doc's greeting and closing tone to match the brand's voice. If the brand is casual (like a food brand), write casually. If it's premium, write accordingly.
+1. Check `STATISFY-BRAND.md` exists at the repo root. If it does not, stop and ask the operator to restore it from version control — every other skill depends on it.
+2. Check `context/brand-style.md` exists in the working directory.
+   - **If it does not exist:** materialise it. Copy the rendered brand fields from `STATISFY-BRAND.md` into the structure used by `context/brand-style.md` (see template below). Save. Confirm. Exit.
+   - **If it exists:** read both files and proceed to Phase 1.
+3. Create the following folders if missing: `context/`, `assets/`, `outputs/creatives/`.
 
 ---
 
-## Phase 3 — Asset and Response Review
+## Phase 1 — Drift Check
 
-Once assets and the completed doc are returned:
+Diff `context/brand-style.md` against `STATISFY-BRAND.md`. Report:
 
-**Assets received:**
-- Brand guidelines / Canva Brand Kit → use as primary source for Phase 4, compress interview to gap-fillers only
-- Logo file → save to `context/logo.png`
-- Product photos → save to `assets/products/[product-name].png`
-- Lifestyle photos → save to `assets/lifestyle/`
-- Example posts → save to `assets/example-posts/`
-- Hex codes → record as client-supplied
-- Font names → record in typography section
-- Inspo/avoid accounts → note in Do/Don't section
+- Fields that are stale or contradict the canonical doc
+- Any `[TBC — confirm with X]` placeholders still unfilled (rare now that the brand kit is documented)
+- Missing customer names from the public roster
+- Missing product surface (e.g. a new agent type announced on the site)
+- Missing or outdated compliance certifications
 
-**Doc responses received:**
-- ICP → record in Brand Overview and Audience sections
-- Hero products → record in Brand Overview
-- Differentiators → record in positioning
-- Social goals → record in Brand Overview
-- Current situation → note as baseline context
+Output a short drift report:
 
-After reviewing, identify any remaining gaps before proceeding to Phase 4.
+```
+DRIFT REPORT — context/brand-style.md vs STATISFY-BRAND.md
+✓ Aligned: [list]
+⚠ Drift: [list — fields that differ]
+□ TBC: [list of placeholders still unfilled]
++ Site adds: [list of fields STATISFY-BRAND.md should also be updated with]
+```
+
+Ask the operator which items to resolve.
 
 ---
 
-## Phase 4 — Brand Style Doc
+## Phase 2 — Live Site Evidence Capture (optional)
 
-Synthesise all inputs — evidence capture + client doc responses + received assets — into `context/brand-style.md`.
+Only run when the operator explicitly asks for a site refresh, or when Phase 1 surfaces a likely change (e.g. a new product surface, or no customer addition in 90+ days).
 
-Use this structure:
+Use Playwright (if available) or WebFetch to:
+
+1. Pull `https://www.statisfy.com` homepage. Capture full-page screenshot to `assets/statisfy-homepage.png`.
+2. Pull pages under `/product`, `/customers`, `/security`, `/about` if they exist.
+3. Pull `https://www.linkedin.com/company/statisfy` profile page if Playwright is available — capture to `assets/statisfy-linkedin.png`.
+
+Extract and surface:
+
+- New agent types, new product names, new integrations
+- New customer logos / case study links
+- New compliance certs or claim language
+- Tagline or hero-section copy changes — these signal a positioning shift
+- Pricing or packaging changes (relevant for CTA selection)
+
+Confirmed observations get logged with the source URL. Anything inferred from visual screenshots is marked `(estimated)`.
+
+---
+
+## Phase 3 — Resolve TBC Fields
+
+The Statisfy brand kit is already documented in `STATISFY-BRAND.md`:
+
+- **Brand purple:** Primary `#8d57f7`, Primary light `#a77bfa`, Primary dark `#7040d4`
+- **Navy palette:** Navy 950 `#02030a`, Navy 900 `#080b1c`, Navy 800 `#0c1229`, Navy 700 `#131b3d`
+- **Neutrals:** Dark text `#1a1a1a`, Gray text `#5f6368`
+- **Light surfaces:** Surface 50 `#f8f9fa`, Surface 100 `#f5f0ff`, Surface 200 `#ede5ff`
+- **Typography:** Poppins (heading, weight 600) + Inter (body), both with `sans-serif` fallback
+
+If any of these have shifted (rebrand, design system update), prompt the operator and update `STATISFY-BRAND.md` + `context/brand-style.md`. Otherwise these are already resolved and don't need re-asking.
+
+Remaining items the operator may still need to confirm at brand-refresh time:
+
+- **Compliance roster** — confirm SOC 2 Type II, GDPR, ISO 27001, HIPAA are still current. Add new certs.
+- **Customer roster** — add newly-public customers; remove any whose case studies have been pulled.
+- **Exec voice slots** — which Statisfy leaders are actively posting from their personal accounts and on which topics.
+
+Do not invent values. If something can't be confirmed, leave a `[TBC — confirm with X]` placeholder and note it in the drift report.
+
+---
+
+## Phase 4 — Apply Updates
+
+Write the resolved values back to both:
+1. `context/brand-style.md` (working directory)
+2. `STATISFY-BRAND.md` (repo root) — only if the change is canonical, not project-specific
+
+Use this structure for `context/brand-style.md` (matches what all other skills read):
 
 ```markdown
-# [Brand Name] — Brand Style Guide
+# Statisfy — Brand Style Guide
 
 ## Brand Overview
-- **Name:** [brand name and logo mark format]
-- **Handle:** @[handle]
-- **Tagline:** [tagline]
-- **Bio:** [bio copy]
-- **Locations:** [locations or markets served]
-- **Positioning:** [one-sentence positioning]
-- **Mission:** [mission/vision statement, or omit if none]
-- **Hero products/services:** [the SKUs or services to feature most in content]
-- **Key differentiators:** [what makes them distinct — client's words]
-
----
+- **Name:** Statisfy
+- **Handle:** @statisfy (linkedin.com/company/statisfy)
+- **Tagline:** [from STATISFY-BRAND.md]
+- **Bio:** [from STATISFY-BRAND.md]
+- **Positioning:** AI agents that *do* the customer success work, not just suggest it.
+- **Hero products/services:** Stella AI, Predict, Generate, Automate, Statisfy NoteTaker
+- **Key differentiators:** [from STATISFY-BRAND.md]
 
 ## Target Audience
-
-- **ICP:** [description of the ideal customer — who they are, what they care about]
-- **Customer language:** [words and phrases real customers use — from reviews, bio, testimonials]
-- **What they care about:** [the benefits that matter most to this audience]
-
----
+- **ICP:** CS leadership, CSMs, RevOps at scale/enterprise SaaS
+- **Customer language:** [pull from STATISFY-BRAND.md]
 
 ## Social Media Goals
-
-- **Primary goal:** [awareness / sales / community / growth / launches]
-- **Secondary goal:** [if applicable]
-- **Current baseline:** [posting frequency, what's working, what isn't]
-
----
+- **Primary goal:** Drive demo bookings + establish authority with CS / RevOps
+- **Secondary goal:** Own the "AI agents for CS" voice
+- **Current baseline:** LinkedIn 4–5x/wk, X 3x/wk, monthly product/customer features
 
 ## Colour Palette
-
-| Role | Value | Usage |
-|---|---|---|
-| Primary Background | [hex or description] | [usage] |
-| Primary Text | [hex or description] | [usage] |
-| [other roles as needed] | [hex or description] | [usage] |
-
-[Note accent colour policy]
-[Note if any hex values were estimated from screenshots]
-
----
+[render the colour-palette tables from STATISFY-BRAND.md — brand purple (Primary `#8d57f7`, light `#a77bfa`, dark `#7040d4`), navy (`#02030a` / `#080b1c` / `#0c1229` / `#131b3d`), neutrals (Dark text `#1a1a1a`, Gray text `#5f6368`), light surfaces (`#f8f9fa` / `#f5f0ff` / `#ede5ff`). Mark any unresolved field with `[TBC — confirm with X]`.]
 
 ## Typography
-
-- [Case convention]
-- [Logo mark format]
-- [Attribution or credit format if applicable]
-- [Product/service naming convention]
-- [Font style]
-- [Text on visuals rule]
-
----
+[render from STATISFY-BRAND.md]
 
 ## Signature Content Format
-
-[Describe the brand's most recognisable repeatable post pattern step by step]
-
-```
-[Visual diagram of the format using text]
-```
-
-Real examples from feed:
-- [example 1]
-- [example 2]
-- [example 3]
-- [example 4]
-- [example 5]
-
----
+[render from STATISFY-BRAND.md]
 
 ## Content Pillars
+1. AI Agents at Work (25%)
+2. The Modern CS Org (25%)
+3. Customer Outcomes (20%)
+4. Frameworks & Playbooks (15%)
+5. Product & Platform (10%)
+6. Industry Commentary (5%)
 
-1. **[Pillar name]** — [brief description]
-2. **[Pillar name]** — [brief description]
-3. **[Pillar name]** — [brief description]
-[add more as needed]
-
----
-
-## Visual Photography Style
-
-- [Lighting]
-- [Composition]
-- [Background treatment]
-- [Subject framing]
-- [Colour temperature / mood]
-
----
+## Visual / Photography Style
+[render from STATISFY-BRAND.md]
 
 ## Do / Don't
-
-### DO
-- [rule]
-
-### DON'T
-- [rule]
-
----
+[render from STATISFY-BRAND.md — including banned phrases and required terminology]
 
 ## Format Specs
-
-| Format | Ratio | Primary Use |
-|---|---|---|
-| IG Feed Square | 1:1 (1080×1080) | [use] |
-| IG Story / Reel | 9:16 (1080×1920) | [use] |
-| IG Carousel | 1:1 or 4:5 | [use] |
-[add other formats if relevant]
-
----
+[render from STATISFY-BRAND.md]
 
 ## Tone of Voice
-
-- **[attribute]** — [description]
-- **[attribute]** — [description]
-- **[attribute]** — [description]
-
----
+- Direct
+- Outcome-focused
+- Confident, not hyped
+- Specific
+- Peer-to-peer with CS leaders
 
 ## Sample Captions
-
-> [example caption 1]
-
-> [example caption 2]
-
-> [example caption 3]
+[3 from STATISFY-BRAND.md, plus any new ones from recent best performers]
 ```
-
-Write the completed file to `context/brand-style.md`.
 
 ---
 
-## Phase 5 — Review and Finalise
+## Phase 5 — Confirm
 
-Present the completed file to the operator and ask:
+Present the diff of what changed. Ask the operator to confirm before this becomes the live brand reference. After confirmation:
 
-1. Does anything look wrong or missing?
-2. Are there sections that don't apply to this client? (remove them)
-3. Are there sections missing for this client? (add them)
-
-Make any requested changes. Then confirm:
-
-> "Brand style guide is saved to `context/brand-style.md`. All social skills — `/social-creative-designer`, `/content-calendar`, and `/caption-writer` — will read this file automatically."
+> "Brand style guide updated. All Statisfy content skills — /content-calendar, /caption-writer, /linkedin-writer, /x-writer, /threads-writer, /social-creative-designer, /publisher, /social-performance-review — will read this file automatically."
 
 ---
 
 ## Output
 
 **Primary output:** `context/brand-style.md`
-
-**Supporting outputs:**
-- `[Client-Name]-Brand-Onboarding.md` — client-facing doc (in project root)
-- `assets/website-homepage.png`
-- `assets/instagram-profile.png`
-- `assets/products/` — hero product photos
-- `assets/lifestyle/` — lifestyle shots
-- `assets/example-posts/` — post style references
+**Conditional updates:** `STATISFY-BRAND.md` (only when a change is canonical)
+**Supporting outputs (only if site refresh was run):**
+- `assets/statisfy-homepage.png`
+- `assets/statisfy-linkedin.png`
+- `assets/products/` — official product screenshots (Stella, Predict, Generate, Automate, NoteTaker)
 
 ---
 
 ## Notes for Operators
 
-- **Always do evidence capture before generating the client doc.** Pre-filling confirmed facts dramatically reduces the client's burden and shows professionalism. A client who sees their own words reflected back corrects less and fills in gaps faster.
-- **The signature content format and real caption examples are the most important inputs** — they're what makes generated content look and sound like the brand's existing feed, not generic AI output.
-- **The colour palette is the second most critical visual input** — one wrong colour in a generated image breaks brand consistency. Estimate from screenshots if needed, mark as "(estimated)".
-- **For product brands:** getting original high-res product photos is non-negotiable for `/social-creative-designer`. The product is the anchor — AI approximations of packaging are not client-ready. Flag this clearly in the asset request.
-- **If a Canva Brand Kit or brand guidelines are provided:** use as primary source for Phase 4, reduce Part 3 interview to gap-fillers only.
-- **Do not invent brand details.** Leave unknown values as `[TBC — not provided]`.
-- **The Audience and Social Media Goals sections** feed `/content-calendar` and `/caption-writer` — don't skip them even if the client seems impatient. Without ICP and goals, content pillars and caption angles will be generic.
+- **This is not a discovery skill.** The brand is known. Do not re-interview, do not re-derive content pillars from scratch. Treat the canonical doc as the source of truth and resolve drift against it.
+- **`STATISFY-BRAND.md` is the upstream copy.** When something genuinely changes about Statisfy (new product, new positioning, new compliance cert), update the canonical doc first, then propagate to `context/brand-style.md`. Don't let project copies fork.
+- **Brand kit is documented.** Statisfy's palette (brand purple `#8d57f7` family, navy `#02030a–#131b3d`, neutrals, purple-tinted light surfaces) and typography (Poppins 600 heading, Inter body) live in `STATISFY-BRAND.md`. Don't re-derive these from the website unless the design team has signalled a rebrand.
+- **Customer additions need permission.** Before adding a new customer to the roster (even from a public case study), confirm the legal/marketing lead is happy to be named in social content. Public on the website ≠ approved for every post.
+- **Do not invent.** Leave unknown values as `[TBC]`. Other skills handle TBC gracefully.
+
+---
 
 ## Related Skills
 
-- `/social-creative-designer` — reads `context/brand-style.md` for visual generation
-- `/content-calendar` — reads `brand-style.md` for pillars, audience, and goals
-- `/caption-writer` — reads `brand-style.md` for tone, ICP, and sample captions
-- `/product-marketing-context` — broader strategic context (optional, for more sophisticated engagements)
+- `/social-creative-designer` — reads `context/brand-style.md` for visual palette
+- `/content-calendar` — reads pillars and audience from this file
+- `/caption-writer`, `/linkedin-writer`, `/x-writer`, `/threads-writer` — read voice and tone
+- `/publisher` — reads brand palette for infographic templates
+- `/social-performance-review` — reads pillars to score performance

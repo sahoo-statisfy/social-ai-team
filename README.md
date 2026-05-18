@@ -1,10 +1,31 @@
-# Social AI Team
+# Social AI Team — Statisfy Edition
 
-A set of Claude Code skills that work together as a complete social media team for small and medium businesses. Each skill is a specialist. Together they run the full workflow — from brand setup to platform-native content creation to scheduling and monthly performance review.
+A Claude Code workspace customised for **[Statisfy](https://www.statisfy.com)** — AI agents that automate customer success work. Every skill has been retuned for Statisfy's brand voice, B2B SaaS audience (CS / RevOps leaders at scale and enterprise SaaS), and primary channels (LinkedIn first, X second).
+
+This is a **single-client** customisation. The original generic Social AI Team was built for SMB consumer brands (food, beauty, local services). That workflow has been rewritten to fit Statisfy's category and operating model.
 
 Built to run inside [Claude Code](https://claude.ai/code).
 
-> **Just getting started?** Read [SETUP.md](SETUP.md) — a full beginner walkthrough covering Claude Code, install, MCP setup, and your first client.
+> **Canonical brand reference:** [STATISFY-BRAND.md](STATISFY-BRAND.md) — the single source of truth every skill reads. Update this file when something genuinely changes about Statisfy (new product, new positioning, new compliance cert).
+>
+> **New here?** Read [SETUP.md](SETUP.md) for the original Claude Code / install / MCP walkthrough. The Statisfy-specific notes are in this README.
+
+---
+
+## What's Different in the Statisfy Edition
+
+| Area | Generic Social AI Team | Statisfy Edition |
+|---|---|---|
+| **Client model** | Many SMB clients per repo | Single client — Statisfy |
+| **Primary channel** | Instagram | LinkedIn |
+| **Secondary channel** | Facebook / LinkedIn | X |
+| **Off-channel** | (none — all platforms in play) | Instagram, Facebook, Threads, TikTok (only on explicit operator request) |
+| **Content pillars** | Service / Product / Local / Personal-brand / B2B templates | 6 Statisfy-specific pillars: AI Agents at Work, The Modern CS Org, Customer Outcomes, Frameworks & Playbooks, Product & Platform, Industry Commentary |
+| **Voice** | Adaptive per client | Direct, outcome-focused, confident, peer-to-peer with CS leaders |
+| **Visual register** | Lifestyle photography, product composites, stop-motion reels | Enterprise tech — Navy backgrounds (`#080b1c` family), Primary purple `#8d57f7` accent, Poppins 600 + Inter typography. Product UI polish, customer quote graphics, conference photos with overlay treatment. |
+| **Customer naming** | Generic "client" | Statisfy's real public customer roster (Observe.ai, Sendoso, Cerby, Gremlin, Mixpanel, Illumio, Eightfold.ai, Skyflow, Milestone) — gated by per-month permission roster |
+| **CTAs** | Generic ("link in bio", "DM us") | Statisfy CTAs: Book a Demo, See the Agents, Read the case study |
+| **Benchmarks** | SMB consumer (Instagram-led) | B2B SaaS (LinkedIn-led, anchored on click-through and demo attribution) |
 
 ---
 
@@ -15,139 +36,147 @@ Built to run inside [Claude Code](https://claude.ai/code).
          │
          │  LAYER 1 — FOUNDATION
          ├── /brand-onboarding ──────────→ context/brand-style.md
-         │       Run once per client.             │
-         │       Captures brand identity,          │ (read by all skills below)
-         │       voice, and goals.                 │
-         │                                         ▼
+         │       (refresh against STATISFY-BRAND.md)
+         │       Run when the brand file is missing
+         │       or statisfy.com has shipped a change.
+         │
          ├── /content-calendar ──────────→ context/content-calendar.md
-         │       Run monthly.                      │
-         │       Builds a structured month         │ (read by all content skills)
-         │       of post ideas.                    │
-         │                                         │
-         │  LAYER 2 — CONTENT CREATION             │
-         ├── /caption-writer ────────────→ outputs/captions/
-         │       Instagram, Facebook,
-         │       and multi-platform captions.
+         │       Run monthly. Builds Statisfy's
+         │       LinkedIn-led, X-secondary month.
+         │       Anchors customer features and
+         │       reactive Industry Commentary slots.
          │
-         ├── /social-creative-designer ──→ outputs/creatives/
-         │       Branded visuals via Nano Banana
-         │       (Generate / Composite / Brand / Stop-Motion).
-         │
+         │  LAYER 2 — CONTENT CREATION
          ├── /linkedin-writer ───────────→ outputs/linkedin/
-         │       LinkedIn-native posts.
-         │       First-person, insight-led,
-         │       built for LinkedIn's format.
-         │
-         ├── /threads-writer ────────────→ outputs/threads/
-         │       Threads posts.
-         │       Short, direct, opinion-led,
-         │       500 char limit enforced.
+         │       PRIMARY CHANNEL. Direct,
+         │       outcome-focused posts. Brand voice
+         │       + named-exec first-person.
          │
          ├── /x-writer ─────────────────→ outputs/x/
-         │       X/Twitter posts and threads.
-         │       Punchy, standalone hooks,
-         │       280 char limit enforced.
+         │       Secondary channel. Sharper takes,
+         │       reactive commentary, 280-char hard
+         │       limit, zero hashtags.
+         │
+         ├── /social-creative-designer ──→ outputs/creatives/
+         │       Real-photo overlay treatment
+         │       (Brand mode), product UI polish
+         │       (Product UI mode), rare editorial
+         │       generations (Generate mode).
+         │
+         ├── /caption-writer ────────────→ outputs/captions/
+         │       OFF-CHANNEL. Only for IG/FB
+         │       one-offs (event activations,
+         │       recruiting, founder moments).
+         │
+         ├── /threads-writer ────────────→ outputs/threads/
+         │       EXPERIMENTAL. Only for X cross-posts
+         │       or specific moments.
          │
          │  LAYER 3 — DISTRIBUTION & REVIEW
-         ├── /publisher ─────────────────→ Blotato (scheduled posts)
-         │       Optional. Schedules content
-         │       via Blotato and generates
-         │       infographic visuals.
+         ├── /publisher ─────────────────→ Blotato (LinkedIn + X scheduling)
+         │       Enforces customer-permission gate
+         │       and banned-phrase scan. Generates
+         │       infographic visuals (stat cards,
+         │       framework diagrams, 3-step,
+         │       quote graphics).
          │
          └── /social-performance-review ─→ outputs/reviews/
-                 Run end of month.                  │
-                 Analyses what worked,              │
-                 what didn't, and why.              ▼
+                 Run end of month. Pillar mix,
+                 author voice, customer-named lift,
+                 demand-gen attribution.            │
+                                                    ▼
                                          context/best-performers.md
-                                         (feeds back into next month)
+                                         context/review-history.md
+                                         (feeds next month)
 ```
 
 ### Skills cross-reference each other:
-- `/brand-onboarding` → writes `brand-style.md` → read by all content skills
-- `/content-calendar` → writes `content-calendar.md` → read by all Layer 2 content skills
-- `/caption-writer` → writes Visual Direction field → read by `/social-creative-designer`
-- `/linkedin-writer`, `/threads-writer`, `/x-writer` → write BLOTATO FLAG field → read by `/publisher`
-- `/social-performance-review` → updates `best-performers.md` → read by all content skills next month
+
+- **STATISFY-BRAND.md** → upstream canonical brand → mirrored to **context/brand-style.md** in each working dir
+- `/content-calendar` → writes `content-calendar.md` → read by `/linkedin-writer`, `/x-writer`, `/social-creative-designer`, `/publisher`
+- `/linkedin-writer`, `/x-writer` → write **BLOTATO FLAG** + **Customer permission status** → read by `/publisher`
+- `/social-creative-designer` → produces real-photo overlays + product UI captures → attached at publish
+- `/social-performance-review` → updates `best-performers.md` + `review-history.md` → feeds next month's `/content-calendar`
 
 ---
 
 ## What Each Skill Does
 
-### `/social-media-manager` — Orchestrator
-The coordinator. Reads the current state of a client's workflow and routes to the right starting point — new client setup, monthly production, platform-specific content, end-of-month review, or a specific task. Pause-and-approve gates at every handoff prevent downstream mistakes.
+### `/social-media-manager` — Orchestrator (Statisfy edition)
+Single-client mode. Reads `context/workflow-status.md` and routes to the right next step — brand refresh, monthly content production, publishing, end-of-month review, or a specific Route F task. Approval gates at every transition.
 
-### `/brand-onboarding` — Brand Strategist
-Run once per client before anything else. Uses Playwright to capture evidence from the client's website and Instagram, generates a pre-filled client onboarding doc, then synthesises everything into `context/brand-style.md` — the single source of truth for all creative and content work.
+### `/brand-onboarding` — Brand maintenance
+Not a discovery skill. Reviews `context/brand-style.md` against the canonical `STATISFY-BRAND.md` and the live site (statisfy.com). Resolves drift, updates the customer roster, and re-syncs the brand kit if it shifts.
 
-### `/content-calendar` — Social Media Strategist
-Builds a structured month of post ideas. Defines content pillar ratios and format mix before building. Each post entry includes topic, angle, format, objective, and visual direction. Saves to `context/content-calendar.md` for all content skills to read.
+### `/content-calendar` — Statisfy strategist
+Builds the LinkedIn-led, X-secondary monthly calendar. 6 Statisfy pillars with default 25/25/20/15/10/5 mix. Adjusts to month goal (demo bookings, thought leadership, product launch, event activation, etc.). Anchors customer features (permission-gated), product launches, conference moments, and reactive Industry Commentary slots.
 
-### `/caption-writer` — Senior Copywriter
-Writes ready-to-post captions from the calendar. Six storytelling frameworks, platform-specific formatting for Instagram / LinkedIn / Facebook / TikTok / X. Every caption includes a Visual Direction field as a handoff note for `/social-creative-designer`.
+### `/linkedin-writer` — Statisfy's primary channel
+LinkedIn-native posts in Statisfy's voice — direct, outcome-focused, confident, peer-to-peer with CS / RevOps leaders. Brand voice for company-handle posts; first-person for named-exec personal posts. Per-pillar recipes for hook + body + CTA. Banned-phrase enforcement. Customer-permission status on every post. BLOTATO FLAG for infographic handoff.
 
-### `/social-creative-designer` — Creative Designer
-Generates on-brand social visuals using the Nano Banana image generation MCP. Four modes:
-- **Generate** — AI image from a concept (lifestyle / atmospheric content)
-- **Composite** — anchors the client's real product photo in an AI-generated scene
-- **Brand** — applies text overlay treatment to a real client photo
-- **Stop-Motion** — 6-frame action sequence exported as a looping MP4 Reel
+### `/x-writer` — Statisfy's secondary channel
+Sharper than LinkedIn — contrarian takes, reactive commentary, customer-quote one-liners. 280-char hard limit with count on every post. Zero hashtags. Threading only when an idea genuinely needs the space. Per-pillar X recipes. Customer-permission status enforced.
 
-### `/linkedin-writer` — LinkedIn Content Specialist
-Writes LinkedIn-native posts — not adapted captions. First-person, professional-but-human voice, structured for LinkedIn's format: hook line → short paragraphs → insight → CTA → 3-5 hashtags. Flags posts that would benefit from a Blotato infographic (stats, frameworks, numbered lists).
+### `/social-creative-designer` — Real-photo + product UI specialist
+Three modes for Statisfy: **Brand** (overlay treatment on real photos — team, conference, customer events, headshots), **Product UI** (polish real Stella / Predict / Generate / Automate / NoteTaker screenshots), **Generate** (rare — editorial / atmospheric for thought-leadership posts when no real asset exists). Hard rules: never AI-generate UI, never use lifestyle stock, never use AI visual tropes (glow orbs, circuit boards, blue-gradient brains).
 
-### `/threads-writer` — Threads Content Specialist
-Writes Threads posts: short, direct, opinion-led, made for conversation. Strictly enforces the 500 character limit with a count on every post. Supports standalone posts and connected threads. Takes outperform tips on Threads — this skill writes for how the platform actually works.
+### `/publisher` — Blotato scheduling + infographic generation
+Schedules to LinkedIn (company + exec personals) and X (@statisfy + exec personals). Enforces the **customer-permission gate** — any post quoting a named customer must appear in the current month's `context/customer-roster.md` or it's held. Banned-phrase scan as a backstop. Generates Statisfy-palette infographics (Navy 900 `#080b1c` background, white Poppins 600 headlines, Primary purple `#8d57f7` accent, Inter body) for posts flagged `BLOTATO FLAG: Yes`.
 
-### `/x-writer` — X/Twitter Content Specialist
-Writes X-native posts and threads. Strictly enforces the 280 character limit with a count on every post. Every post works without context — no warm-ups, no preamble. X thread format (1/, 2/...). Optional X trend research via Tasty Content MCP.
+### `/social-performance-review` — Statisfy demand-gen analyst
+Monthly review anchored on **demand-gen metrics** (clicks to statisfy.com, demos sourced from social) — not just engagement rate. Analyses pillar performance, author voice performance, customer-named lift, format effectiveness, banned-phrase slips. Ranked recommendations that feed next month's `/content-calendar` and `/publisher` permission backlog.
 
-### `/publisher` — Social Media Publisher
-Takes approved content from any content skill and schedules it via Blotato MCP. Checks the Blotato connection first — shows a clear setup message if not connected. Generates infographic visuals (stat cards, framework diagrams, 3-step process graphics, quote graphics) for posts flagged by platform specialists. Full schedule confirmation before submitting anything. Blotato is optional — all other skills work without it.
+### `/caption-writer` — Off-channel (deprioritised)
+Instagram / Facebook / multi-platform captions. **Only use for specific one-off moments** — event activations, recruiting, founder/team milestones, or cross-posts. Statisfy's audience is on LinkedIn and X; the default monthly workflow does not include this skill.
 
-### `/social-performance-review` — Social Media Analyst
-Monthly performance review. Accepts CSV exports, screenshots, or manual data input — adapts to whatever the client can provide. Identifies top and bottom performers, content pillar and format patterns, and produces ranked recommendations for next month. Updates `best-performers.md` to feed back into content quality.
+### `/threads-writer` — Experimental (deprioritised)
+Threads posts. Same Statisfy voice; 500-char limit. Used for X cross-posts (slight expansion) or specific experiments with defined success metrics.
 
 ---
 
-## Folder Structure (Per Client)
+## Folder Structure (Statisfy workspace)
 
-When you run these skills for a client, they create and read from this structure automatically:
+When you run these skills, they create and read from this structure automatically:
 
 ```
-your-client-folder/
+your-statisfy-workspace/
+├── STATISFY-BRAND.md            ← canonical brand reference (repo root)
 ├── context/
-│   ├── brand-style.md          ← created by /brand-onboarding
-│   ├── content-calendar.md     ← created by /content-calendar
-│   ├── best-performers.md      ← created/updated by /social-performance-review
-│   ├── upcoming-events.md      ← you create this (optional)
-│   └── workflow-status.md      ← updated by /social-media-manager
+│   ├── brand-style.md           ← per-working-dir copy of STATISFY-BRAND.md
+│   ├── content-calendar.md      ← created by /content-calendar
+│   ├── customer-roster.md       ← current-month approved-to-name customers
+│   ├── best-performers.md       ← updated by /social-performance-review
+│   ├── upcoming-events.md       ← Pulse, SaaStr, customer announcements, product launches
+│   ├── review-history.md        ← month-over-month trend log
+│   └── workflow-status.md       ← updated by /social-media-manager
 ├── assets/
-│   ├── products/               ← client product photos go here
-│   └── lifestyle/              ← lifestyle shots go here
+│   ├── products/                ← real Stella / Predict / Generate / Automate / NoteTaker screenshots
+│   ├── team/                    ← approved headshots, team photos
+│   ├── events/                  ← conference photos
+│   └── customers/               ← approved customer logos (permission-gated)
 └── outputs/
-    ├── captions/               ← /caption-writer (Instagram, Facebook)
-    ├── linkedin/               ← /linkedin-writer
-    ├── threads/                ← /threads-writer
-    ├── x/                      ← /x-writer
-    ├── creatives/              ← /social-creative-designer (Nano Banana visuals)
-    └── reviews/                ← /social-performance-review
+    ├── linkedin/                ← /linkedin-writer
+    ├── x/                       ← /x-writer
+    ├── creatives/               ← /social-creative-designer (real-photo overlays + product UI polish)
+    ├── captions/                ← /caption-writer (off-channel — only when justified)
+    ├── threads/                 ← /threads-writer (experimental — only when justified)
+    └── reviews/                 ← /social-performance-review
 ```
 
 ---
 
 ## Installation
 
-> **New to this?** See [SETUP.md](SETUP.md) for a full beginner walkthrough — Claude Code, MCPs, and your first client folder.
+> **New to this?** See [SETUP.md](SETUP.md) for the full beginner walkthrough — Claude Code, MCPs, and the install steps. The Statisfy-specific notes are below.
 
 ### 1. Get the files
 
-**Option A — Clone with git:**
 ```bash
 git clone https://github.com/stevenflanagan1/social-ai-team.git
 cd social-ai-team
 ```
 
-**Option B — Download ZIP:** click the green **Code** button at the top of this repo, choose **Download ZIP**, unzip it, then open the `social-ai-team` folder in a terminal.
+(Or download ZIP via the green **Code** button.)
 
 ### 2. Run the installer
 
@@ -156,98 +185,94 @@ cd social-ai-team
 bash install.sh
 ```
 
-**Windows:** double-click `install.bat` (or run it from the command line).
+**Windows:** double-click `install.bat` (or run from the command line).
 
-This copies all 10 skills into `~/.claude/skills/` where Claude Code can find them.
+This copies all skills into `~/.claude/skills/` where Claude Code can find them.
+
+**Important — re-run after customisation:** if you edit anything in the `skills/` folder of this repo, re-run `install.sh` to propagate the changes to `~/.claude/skills/`. Claude Code reads the installed copy, not this source.
+
+### 3. Bootstrap a working directory
+
+```bash
+mkdir my-statisfy-month && cd my-statisfy-month
+# open Claude Code in this folder
+# then run /social-media-manager — it will detect no brand file in the working dir
+# and run /brand-onboarding to materialise context/brand-style.md from STATISFY-BRAND.md
+```
 
 ---
 
 ## MCP Requirements
 
-Some skills use MCP tools for enhanced functionality. Skills work in **baseline mode** without them, but these unlock additional capabilities:
-
 | MCP | Used by | What it enables |
 |---|---|---|
-| **Playwright** | `/brand-onboarding` | Evidence capture from website + Instagram |
-| **Nano Banana** | `/social-creative-designer` | AI image generation (required for branded visuals) |
-| **Blotato** | `/publisher` | Post scheduling + infographic generation (optional — only needed for publishing) |
-| **Firecrawl** | `/content-calendar`, `/caption-writer`, `/social-performance-review`, `/linkedin-writer`, `/x-writer` | Competitor content research (optional) |
-| **SerpApi** | `/content-calendar`, `/caption-writer` | Trend research (optional) |
-| **Tasty Content** | `/x-writer` | X/Twitter trend research (optional) |
+| **Playwright** | `/brand-onboarding` | Optional — live site evidence capture from statisfy.com when refreshing the brand file |
+| **Nano Banana** | `/social-creative-designer` | AI image edit/generate for Brand mode, Product UI mode, and rare Generate mode |
+| **Blotato** | `/publisher` | LinkedIn + X scheduling + infographic generation. Required for `/publisher`. |
+| **Firecrawl** | `/content-calendar`, `/linkedin-writer`, `/x-writer`, `/social-performance-review` | Optional — competitor LinkedIn / X analysis (Gainsight, ChurnZero, Catalyst, Vitally, Planhat) |
+| **SerpApi** | `/content-calendar` | Optional — trending topic / industry news research |
+| **Tasty Content** | `/x-writer` | Optional — current X conversation research for Industry Commentary posts |
 
-Playwright and Nano Banana are the two you need for the core workflow. Blotato is optional — all content creation skills work without it. You only need Blotato if you want to schedule posts directly from Claude Code. Firecrawl, SerpApi, and Tasty Content are optional enhancements.
-
-### Stop-Motion Reels (optional)
-The `/social-creative-designer` Stop-Motion mode exports frames as an MP4 via Python. Requires:
-```bash
-pip install imageio[ffmpeg]
-```
+**Minimum for the Statisfy workflow:** Blotato (publishing) and Nano Banana (visuals). Firecrawl, SerpApi, and Tasty Content are optional research enhancements.
 
 ---
 
 ## How to Use
 
-### New client
+### Monthly workflow (default)
 ```
 /social-media-manager
 ```
-The orchestrator will detect that no brand file exists and walk you through `/brand-onboarding` first.
+The orchestrator reads `context/workflow-status.md` and picks up where you left off. New month → builds calendar → writes LinkedIn → writes X → handles visuals → publishes → end-of-month review.
 
-### Running a specific skill directly
+### Brand refresh
 ```
 /brand-onboarding
-/content-calendar
-/caption-writer
-/social-creative-designer
-/linkedin-writer
-/threads-writer
-/x-writer
-/publisher
-/social-performance-review
+```
+Run when statisfy.com has changed, a new case study has shipped, the brand kit has shifted, or the customer-permission roster needs updating. Reviews drift against `STATISFY-BRAND.md` and the live site.
+
+### Specific tasks (most common in practice)
+```
+/linkedin-writer       # one-off LinkedIn post (e.g. reactive Industry Commentary)
+/x-writer              # one-off X post (e.g. reaction to a news event)
+/social-creative-designer  # one-off visual
+/publisher             # schedule whatever's been approved
+/social-performance-review  # end-of-month
 ```
 
-### Publishing content (Blotato)
-
-After writing LinkedIn, Threads, or X content with the platform specialists:
+### Off-channel (rare — only when justified)
 ```
-/publisher
-```
-The publisher checks your Blotato connection, reviews flagged infographic opportunities, confirms the schedule, and submits. Requires Blotato to be configured first — see the MCP Requirements section above.
-
-### Monthly workflow (existing client)
-```
-/social-media-manager
-```
-The orchestrator reads `context/workflow-status.md` and picks up exactly where you left off.
-
----
-
-## Recommended Setup per Client
-
-1. Create a dedicated folder for the client
-2. `cd` into that folder before running any skill — context files are scoped to the working directory
-3. Run `/social-media-manager` to start
-
-```bash
-mkdir my-client && cd my-client
-# open Claude Code in this folder
-# then run /social-media-manager
+/caption-writer        # event activation IG post, recruiting moment
+/threads-writer        # X cross-post experiment
 ```
 
 ---
 
-## Reference Files
+## Customisation Inventory (this edition)
 
-Three reference documents are bundled with the relevant skills:
+Files changed in the Statisfy edition vs the original Social AI Team:
 
-| File | Used by | Contents |
-|---|---|---|
-| `content-calendar/references/content-mix-guide.md` | `/content-calendar` | Recommended pillar ratios by business type |
-| `caption-writer/references/hook-library.md` | `/caption-writer` | 40+ hook formulas by type |
-| `social-performance-review/references/benchmarks.md` | `/social-performance-review` | Engagement benchmarks by platform and account size |
+| File | Change |
+|---|---|
+| `STATISFY-BRAND.md` | **New** — canonical brand reference |
+| `context/brand-style.md` | **New** — Statisfy-prefilled per-working-dir copy |
+| `skills/brand-onboarding/SKILL.md` | Rewritten — now a brand maintenance skill, not discovery |
+| `skills/content-calendar/SKILL.md` | Rewritten — Statisfy pillars, LinkedIn-led, single-client |
+| `skills/content-calendar/references/content-mix-guide.md` | Rewritten — B2B SaaS pillars only |
+| `skills/linkedin-writer/SKILL.md` | Rewritten — Statisfy voice, per-pillar recipes, customer permission, banned phrases |
+| `skills/x-writer/SKILL.md` | Rewritten — Statisfy voice on X, contrarian / commentary patterns |
+| `skills/caption-writer/SKILL.md` | Rewritten — deprioritised as off-channel; for specific one-offs only |
+| `skills/caption-writer/references/hook-library.md` | Rewritten — Statisfy-flavoured hook formulas |
+| `skills/threads-writer/SKILL.md` | Rewritten — experimental / cross-post only |
+| `skills/social-creative-designer/SKILL.md` | Rewritten — Brand / Product UI / Generate modes; no lifestyle, no fake UI, no AI tropes |
+| `skills/publisher/SKILL.md` | Rewritten — LinkedIn + X only; customer-permission gate; banned-phrase scan |
+| `skills/social-performance-review/SKILL.md` | Rewritten — B2B SaaS analysis, demand-gen anchored, author-voice and customer-named-lift analysis |
+| `skills/social-performance-review/references/benchmarks.md` | Rewritten — B2B SaaS benchmarks; CTR + demos sourced as primary |
+| `skills/social-media-manager/SKILL.md` | Rewritten — single-client orchestrator with Statisfy routes |
+| `README.md` | This file — Statisfy edition overview |
 
 ---
 
 ## License
 
-Created by the AI Impact use it, adapt it, build on it. Want a custom build? https://theaiimpact.co/ 
+Original Social AI Team created by [The AI Impact](https://theaiimpact.co/). Statisfy-edition customisations applied for use within Statisfy's social workflow. Want a different brand build? See the original repo.
