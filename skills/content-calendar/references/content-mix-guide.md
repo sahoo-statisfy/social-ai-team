@@ -1,106 +1,110 @@
-# Content Mix Guide
+# Content Mix Guide — Statisfy
 
-Recommended content pillar ratios and post formats by business type. Use as a starting point — adjust based on the client's month goal and any available performance data.
+Statisfy is **B2B SaaS — AI agents for customer success.** This file replaces the original SMB content-mix guide. The previous categories (service business, product business, local business, personal brand, etc.) do not apply.
+
+Use this as the starting point. Adjust per month based on goal and best-performers data.
 
 ---
 
-## Service Business (Salon, Clinic, Tradesperson, Therapist, Gym, Studio)
+## Statisfy Default Pillar Mix
 
-**Core pillars:**
-| Pillar | Ratio | Notes |
+| Pillar | Default Ratio | What it looks like |
 |---|---|---|
-| Results / Before & After | 25% | The highest-converting content for service businesses. Real outcomes build trust. |
-| Educational / Tips | 20% | Position as the expert. Answer the questions clients ask before booking. |
-| Behind the scenes | 20% | Humanises the business. Shows the people, the process, the environment. |
-| Social proof / Testimonials | 15% | Client reviews, testimonials, user-generated content. |
-| Promotional / Offers | 10% | Special offers, gift cards, booking CTAs. Keep below 20% or trust erodes. |
-| Community / Engagement | 10% | Questions, polls, relatable observations. Drives comments. |
+| **AI Agents at Work** | 25% | Concrete examples of agents doing CS work. Demos, screenshots, before/after. Stella generating a QBR. Predict surfacing an at-risk account. Automate putting an NB-action on the CSM's plate. |
+| **The Modern CS Org** | 25% | Opinion / thought leadership on how CS teams should operate in the AI era. Contrarian takes. Often first-person from exec voices. |
+| **Customer Outcomes** | 20% | Named customer metrics with permission (Observe.ai, Sendoso, Cerby, Gremlin, Mixpanel, Illumio, Eightfold.ai, Skyflow, Milestone). Quoted GRR / NRR / hours-saved numbers. |
+| **Frameworks & Playbooks** | 15% | Health scoring frameworks, QBR structures, renewal motion playbooks, RevOps templates. High-save / high-share content. |
+| **Product & Platform** | 10% | Stella / Predict / Generate / Automate / Statisfy NoteTaker spotlights. Integration features (Salesforce, HubSpot, Zendesk, Gainsight). |
+| **Industry Commentary** | 5% | Reactive — earnings cycles (Gainsight especially), AI model launches with CS implications, competitor category moves, conference moments (Pulse, SaaStr). |
 
-**Best formats:** Single image (results), carousel (tips/educational), reels (transformations, BTS)
-
----
-
-## Product Business (E-commerce, Food & Bev, Retail, Maker)
-
-**Core pillars:**
-| Pillar | Ratio | Notes |
-|---|---|---|
-| Product showcase | 30% | The product is the hero. Lifestyle shots, flat lays, in-use context. |
-| Social proof / UGC | 20% | Customer photos, reviews, unboxing. Highest-converting for product businesses. |
-| Behind the scenes / Brand story | 20% | How it's made, the founder, the values. Builds loyalty beyond the product. |
-| Educational / How-to | 15% | How to use it, why it works, what it pairs with. Reduces purchase hesitation. |
-| Promotional | 15% | Sale announcements, bundles, limited editions. Slightly higher than services — product audiences expect it. |
-
-**Best formats:** Single image (product), carousel (how-to, product range), reels (unboxing, lifestyle)
+**Best formats per pillar:**
+- **AI Agents at Work** → video / GIF (real Stella demo), single image with product screenshot
+- **The Modern CS Org** → LinkedIn text post (first-person from exec), X standalone tweet (contrarian)
+- **Customer Outcomes** → quote graphic with logo (permission-gated), LinkedIn carousel (multi-slide case study)
+- **Frameworks & Playbooks** → LinkedIn carousel (PDF, multi-slide), X thread, framework diagram (handled by `/publisher`)
+- **Product & Platform** → video / GIF (product demo), single image with annotated screenshot
+- **Industry Commentary** → LinkedIn text post (reactive POV), X standalone tweet, X thread (deep dive)
 
 ---
 
-## Local Business (Café, Restaurant, Bar, Retail Store, Venue)
+## Month-Goal Adjustments
 
-**Core pillars:**
-| Pillar | Ratio | Notes |
-|---|---|---|
-| Food / Product / Space showcase | 30% | The visual hero. High-quality photography of what they offer. |
-| Behind the scenes | 25% | Staff, prep, the story behind dishes or products. Builds community regulars. |
-| Community / Local | 20% | Local events, neighbourhood shoutouts, customer features. Amplifies word of mouth. |
-| Promotional / Events | 15% | Specials, events, new menu items, seasonal offers. |
-| Social proof | 10% | Reviews, customer tags, press mentions. |
-
-**Best formats:** Single image (food/product), reels (kitchen BTS, atmosphere), stories (daily specials)
-
----
-
-## Personal Brand / Founder / Coach / Consultant
-
-**Core pillars:**
-| Pillar | Ratio | Notes |
-|---|---|---|
-| Educational / Insights | 30% | The core value. Share expertise, frameworks, hard-won lessons. |
-| Personal story / Journey | 25% | Builds connection. Failures, pivots, origin stories. |
-| Social proof / Results | 20% | Client wins, testimonials, case study snippets. |
-| Hot takes / Contrarian | 15% | Opinion content drives comments and follows. |
-| Promotional | 10% | Offers, programmes, speaking, services. |
-
-**Best formats:** Text (LinkedIn), carousel (frameworks, tips), reels (quick wins, opinions)
-
----
-
-## B2B / SaaS / Professional Services
-
-**Core pillars:**
-| Pillar | Ratio | Notes |
-|---|---|---|
-| Educational / Thought leadership | 35% | Builds authority. Long-form insights, data, frameworks. |
-| Case studies / Results | 20% | Proof. Specific client outcomes with numbers. |
-| Behind the scenes / Team | 15% | Culture content. Humanises the brand and aids recruiting. |
-| Industry commentary | 15% | React to news, trends, or common misconceptions. |
-| Promotional / Product | 15% | Feature announcements, demos, offers. |
-
-**Best formats:** Text (LinkedIn), carousel (frameworks, stats), reels (product demos, team culture)
-
----
-
-## Month Goal Adjustments
-
-Override the default ratios based on the primary goal for the month:
+Override the default ratios based on the primary goal:
 
 | Goal | Adjustment |
 |---|---|
-| **Grow audience / reach** | +10% educational, +5% contrarian/opinion, -10% promotional, -5% BTS |
-| **Drive enquiries / bookings** | +10% results/social proof, +5% promotional, -10% BTS, -5% educational |
-| **Launch a product or service** | +15% promotional (campaign content), -5% each from 3 other pillars |
-| **Build engagement / community** | +10% engagement/community, +5% BTS, -10% promotional, -5% results |
-| **Establish authority** | +15% educational/thought leadership, -10% promotional, -5% social proof |
+| **Demo bookings push** | +5% Customer Outcomes, +5% Product & Platform, –10% Industry Commentary |
+| **Authority / thought leadership** | +10% The Modern CS Org, –5% Product & Platform, –5% Industry Commentary |
+| **Product launch / feature month** | +15% Product & Platform, –5% each from three other pillars |
+| **Community / engagement** | +10% The Modern CS Org (more contrarian), +5% Industry Commentary, –10% Product & Platform, –5% Customer Outcomes |
+| **Event / conference activation** (Pulse, SaaStr, RevOps) | +10% Industry Commentary, +5% Customer Outcomes, –10% Frameworks & Playbooks, –5% Product & Platform |
+| **Net new logo push** (top-of-funnel) | +5% AI Agents at Work, +5% The Modern CS Org, –5% Product & Platform, –5% Industry Commentary |
+
+---
+
+## Platform-Specific Format Mix
+
+### LinkedIn — Primary
+
+| Format | Typical share | Notes |
+|---|---|---|
+| Text post | 40% | Opinion, story, contrarian, exec voices. Backbone of LinkedIn for Statisfy. |
+| Single image / quote graphic | 25% | Customer quotes, stat cards. Quote graphics often generated by `/publisher`. |
+| Carousel (PDF) | 20% | Frameworks, playbooks, multi-slide case studies. Highest save / repost format on LinkedIn for B2B. |
+| Video / GIF | 15% | Real product demos (Stella generating a QBR, Predict surfacing a health score), customer interviews. Driver for demo-CTA clicks. |
+
+### X — Secondary
+
+| Format | Typical share | Notes |
+|---|---|---|
+| Standalone tweet | 60% | Contrarian takes, sharp observations, reactions. Statisfy's default X format. |
+| Thread | 25% | Frameworks, multi-step explainers, deep Industry Commentary breakdowns. |
+| Single image / stat card | 15% | Customer outcomes, headline numbers. Often a cross-post of a LinkedIn quote graphic. |
+
+### Off-Channel (deprioritised)
+
+Instagram, Facebook, Threads, TikTok are not part of Statisfy's regular mix. Run `/caption-writer` or `/threads-writer` only for specific use cases:
+- Event activations (Pulse, SaaStr presence)
+- Recruiting / culture moments (team milestones, new hires, conference photos)
+- Cross-posts of a high-performing LinkedIn / X post
+
+---
+
+## Author Voice Mix
+
+Track this alongside pillar mix. For Statisfy, voice distribution matters as much as topic distribution.
+
+| Voice | Typical share | Notes |
+|---|---|---|
+| Statisfy brand (company page) | 50% | Product news, customer announcements, frameworks, company milestones |
+| Named exec — Founder / CEO | 20% | The Modern CS Org pillar's primary voice — contrarian thought leadership |
+| Named exec — VP Marketing / VP CS / Head of CS at Statisfy | 20% | Customer Outcomes (frontline) + Frameworks & Playbooks (practitioner) |
+| Named exec — Other (Head of Eng / Product) | 10% | AI Agents at Work + Product & Platform — technical voice |
+
+Distribution adjusts based on which execs are actively posting and which voices are over- or under-performing per `/social-performance-review`.
 
 ---
 
 ## Format Guide by Objective
 
-| Objective | Best format | Why |
+| Objective | Best format | Why for Statisfy |
 |---|---|---|
-| Saves | Carousel | Multi-image posts get saved for later — tips, checklists, how-tos |
-| Comments | Question post / Poll | Direct prompt for response |
-| Shares | Relatable observation / Opinion | People share content that makes them look smart or understood |
-| Reach / New followers | Reel | Platform algorithm still favours short-form video for discovery |
-| Conversions / Clicks | Single image with CTA | Clean, focused, one action |
-| Trust building | Social proof / BTS | Authenticity and outcomes |
+| **Demo-CTA clicks** | Video (product demo) + text post (numbered outcome) | Watching Stella in action drives demo bookings; numbered outcomes signal value |
+| **Saves / reposts** | Carousel (framework / playbook) | LinkedIn carousels are the highest-save B2B format |
+| **Comments / replies** | Contrarian text post (first-person exec) | Opinion + question close drives the most reply volume on LinkedIn for B2B |
+| **Impressions / reach** | Industry Commentary text post (reactive) | Riding a trigger event extends reach beyond followers |
+| **Conversions / pipeline** | Single image + clear demo CTA | Clean focused asks beat clever wraps for direct response |
+| **Trust building / authority** | Customer Outcomes quote graphic + Frameworks carousels | Named customer wins + tactical frameworks build category authority |
+
+---
+
+## Calendar Anchors (Statisfy)
+
+Block these first; fill the rest of the calendar around them:
+
+- **Weekly:** 1 Customer Outcome post on LinkedIn (rotating named customer with permission)
+- **Weekly:** 1 contrarian / POV LinkedIn post from a Statisfy exec (first-person)
+- **Monthly:** 1 product demo / feature spotlight (Stella / Predict / Generate / Automate / NoteTaker rotation)
+- **Quarterly:** QBR-season content moment (each quarterly transition is a QBR cycle)
+- **Industry events:** Pulse (Gainsight), SaaStr, Forrester CX/CS events, RevOps Co-op events — each warrants a content block
+- **Reactive slots:** 1–2 floating slots per week for Industry Commentary, filled within 48h of a trigger

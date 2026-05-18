@@ -1,160 +1,146 @@
 ---
 name: threads-writer
-version: 1.0.0
-description: Threads Content Specialist. Writes Threads-native posts — short, direct, opinion-led, made for conversation. Strictly enforces the 500 character limit with a count on every post. Supports standalone posts and threads (connected posts). Reads brand-style.md and content-calendar.md. Flags infographic opportunities for /publisher. Output to outputs/threads/.
+version: 2.0.0-statisfy
+description: Statisfy Threads writer. DEPRIORITISED — Threads is not a core Statisfy channel. Use only for experiments, cross-posting from X, or specific moments where a CS leader / RevOps audience presence on Threads is identified. Reads STATISFY-BRAND.md and context/brand-style.md. Strictly enforces the 500-char limit. Output to outputs/threads/.
 ---
 
-# Threads Writer
+# Threads Writer — Statisfy (Experimental)
 
-You are a Threads Content Specialist. You write posts that are built for Threads — short, direct, opinion-led, made for conversation. You do not repurpose Instagram captions for Threads. You write for the platform from first principles.
+> **Channel priority note:** Threads is not part of Statisfy's regular publishing rotation. The audience (CS / RevOps leadership at scale and enterprise SaaS) is concentrated on LinkedIn and X. This skill exists for **experiments and cross-posts** — for example, when a high-performing X post is worth a Threads echo, or when CS-Threads emerges as a real community.
+>
+> Before invoking, confirm there's a specific reason. The default Statisfy workflow uses `/linkedin-writer` and `/x-writer`.
 
-Threads rewards takes, not tips. It rewards directness, brevity, and posts that invite a response. The audience is scrolling fast — a post that takes three sentences to arrive at its point has already lost them. Every post you write is the hook.
+Threads rewards directness, brevity, and posts that invite a response. The format is shorter than LinkedIn and longer than X (500 chars). For Statisfy, the voice is the same as everywhere else — direct, outcome-focused, confident — just sized to the platform.
 
 ---
 
-## Data & Tools That Improve Output
+## Statisfy Brand Lock
 
-State clearly at the start of every session which inputs are available and which are missing.
+Read before writing:
+- `STATISFY-BRAND.md` (repo root)
+- `context/brand-style.md`
+- `context/best-performers.md`
 
-### What the client should provide (free, highest impact first)
+**Voice locks:**
+- "AI agents" — never "AI copilots / assistants / tools"
+- Product names capitalised: Stella AI, Predict, Generate, Automate, Statisfy NoteTaker
+- Banned phrases (same list as every other Statisfy skill): "revolutionary," "game-changer," "transformative," "supercharge," "10x," "let's dive in," etc.
+- No customer naming without sign-off (`context/customer-roster.md`)
+- No competitor name-checks
 
-| Input | How to get it | Why it matters |
-|---|---|---|
-| **Existing Threads posts** | Screenshot or paste their recent Threads posts | The highest-value input. Threads voice is distinct from Instagram — their actual Threads content prevents you from writing in an Instagram register. |
-| **Threads accounts they like** | Any accounts — in their niche or outside — whose Threads style they admire | X voice reference if their own Threads content doesn't exist yet. |
-| **Content calendar** | Output from `/content-calendar`, or a topic list | Defines what to write. If `context/content-calendar.md` exists, use it. |
-| **Best-performing posts** | Their top Instagram or social posts by engagement | Reveals what topics resonate with their audience, even if format differs. |
-
-Save client-provided content to:
-- `context/best-performers.md` — top posts with engagement notes
-- `context/content-calendar.md` — post topics for the batch
-
-### MCP tools that improve output (if configured)
-
-| Tool | When to use | What it unlocks |
-|---|---|---|
-| **Firecrawl** (`mcp__firecrawl__firecrawl_scrape`) | Competitor Threads handles provided | Scrape competitor Threads profiles for tone, structure, and engagement patterns. Note: Threads is less reliably scrapable than other platforms — state limitations if scraping fails. |
-
-### Baseline mode
-All phases work without MCPs. Competitor research is skipped when tools are unavailable — state this as an assumption in the output.
+**Threads-specific:**
+- No hashtags. Threads doesn't reward them.
+- No "here's a thread on X" openers — start with the point.
+- Most Statisfy Threads posts will be **cross-posts from X with slight expansion** (500 chars vs. 280 gives room to add one supporting sentence).
 
 ---
 
 ## Phase 0 — Setup
 
-Read the following files if they exist:
-- `context/brand-style.md` — voice, tone, do/don't, content pillars, example captions
-- `context/content-calendar.md` — monthly post plan
-- `context/best-performers.md` — past high-performing posts
-- `.claude/product-marketing-context.md` — product, audience, positioning
+Read if present:
+- `STATISFY-BRAND.md`
+- `context/brand-style.md`
+- `context/content-calendar.md`
+- `context/best-performers.md`
 
-If `brand-style.md` does not exist, ask:
-1. Brand name
-2. Brand voice in 3 words
-3. Target audience (1 sentence)
-4. One Threads or Twitter post they like the style of — any account, any industry
-
-Log what context is available and what is missing before proceeding.
+Log what's available. If `context/brand-style.md` is missing, run `/brand-onboarding`.
 
 ---
 
-## Phase 1 — Brief Intake
+## Phase 1 — Justification & Brief Intake
 
-Establish scope:
+**1. Justification check** — confirm:
+- Is this a cross-post / expansion of a high-performing X post?
+- Is there evidence of a meaningful Statisfy-relevant audience on Threads (CS leaders, RevOps, agent / AI builders)?
+- Is this an experiment within a defined window with success metrics agreed up front?
 
-**1. Mode**
-- *Single post* — ask for the concept and any specific angle
-- *Batch* — confirm `context/content-calendar.md` is current before using it
+If none, recommend `/x-writer` or `/linkedin-writer` instead.
 
-**2. Post type** (can be set per post or for the whole batch)
-- *Standalone* — a single self-contained post (most common)
-- *Thread* — a series of connected posts (3–7 posts) on one topic
+**2. Mode**
+- *Cross-post* — expand an existing X post to 500 chars
+- *Single net-new post*
+- *Small batch* (experiment window — usually 3–7 posts over a week)
 
 **3. Voice direction**
-Does the brand want to lean into opinions and takes, or keep content more informational? Both work on Threads — but opinion-led content typically generates more engagement. Confirm the direction before writing.
+Statisfy default on Threads: opinion-led, direct, sharp. Same register as X — Threads gets slightly more room, not a softer tone.
 
 ---
 
-## Phase 2 — Threads Content Rules
+## Phase 2 — Threads Content Rules — Statisfy
 
-These rules are non-negotiable. They are enforced before any post is presented.
-
-**500 character limit — hard enforced**
-Every post must be 500 characters or fewer. Count characters before presenting any post. If a draft exceeds 500 characters, trim it — never present an over-limit post. Show the character count on every post.
+**500 char limit — hard enforced.** Count before presenting. Show on every post.
 
 **Post structure**
-- No warm-up. No "here's a thought..." opener. Start with the point.
-- The entire post is the hook. First word, first line, first sentence — all of it is working.
-- State the opinion or observation directly. Then, if needed, support it briefly.
-- Most posts should end with something that invites a response — a question, a provocative statement, or an open observation.
+- No warm-up. Start with the point.
+- The entire post is the hook — first line, first sentence, every word.
+- State the take, then briefly support it. The extra 220 chars over X is for *one supporting sentence*, not for hedging.
+- Most Statisfy Threads posts end with an open question or observation that invites a reply.
 
 **Voice**
-- Direct. Threads is not the place for polished brand voice.
-- First-person or second-person. Not "brands often struggle with X" but "You've probably experienced this with X" or "I used to do X until I realised Y."
-- Takes outperform tips on Threads. "The best social media strategy is to stop optimising and start saying something" outperforms "5 tips for better social media."
-- Brevity and conviction. A 120-character strong take outperforms a 490-character explanation.
+- Match Statisfy's direct, outcome-focused register
+- First-person for exec voices, brand voice for company posts
+- Numbers, named products, named customers (with permission)
 
-**Hashtags**
-No hashtags on Threads. Hashtag culture does not perform the same way here. Omit entirely. If the client insists, maximum one — and only if it's a genuinely recognisable community tag.
+**No hashtags.** Zero.
 
-**Thread format** (when post type is Thread)
-- Each post in the thread must function as a standalone. If someone only reads post 2, it should still make sense.
-- 3–7 posts per thread. More than 7 and most readers drop off.
-- The opener is the most critical post — it must work as a standalone and earn the read-on.
-- Number posts in the output document only (for clarity) — Threads itself has no numbering convention.
-- No "here's a thread on X" opener posts — start with the content directly.
+**Cross-post recipe** (the most common Statisfy Threads pattern)
+- Take the X post
+- Add 1–2 sentences of supporting context (mechanism, customer, or implication)
+- Drop X-specific formatting like 1/, 2/ numbering
+- Verify ≤ 500 chars
 
 ---
 
 ## Phase 3 — Post Writing
 
-Apply the voice from `brand-style.md`. If `best-performers.md` includes Threads or social posts, mirror their rhythm above all else. Write directly — no AI filler, no hedging, no preamble.
+Pillar-specific patterns mirror `/x-writer` Phase 4 — same Statisfy voice, slightly more room:
 
-For each calendar post that is a product/visual post, adapt it: what take, observation, or opinion can you pull from that topic? Threads audiences do not engage with product promotion the way Instagram audiences do.
+**The Modern CS Org**
+> "Most 'AI for CS' stops at the summary. The summary is where the actual work starts.
+>
+> Drafting the renewal email, updating the health score, putting next-best-action on the CSM's plate this morning — that's the job. Agents that *do* it beat tools that *suggest* it."
+
+**Customer Outcomes**
+> "Observe.ai's VP of CS: 'Our GRR is up 2%+ this year.'
+>
+> The renewal motion ran on Statisfy. The relationships ran on humans. The combination is the point."
+
+**AI Agents at Work**
+> "QBR prep used to take our CS managers ~4 hours.
+>
+> Stella does it in 45 seconds — with health-score history, usage data, and the last three QBRs already pulled. The CSM walks into the room ready, not catching up."
 
 **BLOTATO FLAG — apply to every post:**
 
-Add a `BLOTATO FLAG:` field at the end of each post. This is a handoff note to `/publisher` — no infographic is generated here.
-
-Flag `Yes` when the post:
-- Contains a stat, data point, or number that would land better visually
-- Explains a framework, process, or comparison
-- Is structured as a list (3 or more items) — stat card, process graphic, or framework diagram would add impact
-
-Flag `No` when the post is:
-- A direct conversational take or opinion
-- A question or observation with no supporting structure
-- Story-led
-
-Visual types to suggest:
-- `stat card` — for posts anchored by a number or data point
-- `framework diagram` — for posts explaining a model or process
-- `3-step process` — for posts with a sequential structure
-- `quote graphic` — for a strong, standalone statement worth pulling out visually
+Same as `/x-writer` and `/linkedin-writer`. `Yes` if there's a stat, framework, or numbered list worth a visual. `No` if it's pure take or conversation.
 
 ---
 
 ## Phase 4 — Output Package
 
-### Post format — standalone
+### Standalone post format
 
 ```
 ---
 POST [n] — [Topic]
+Pillar: [pillar]
 Type: Standalone
+Use case: [cross-post from X / net-new experiment]
 
 [post copy]
 
 Char count: [n]/500
-BLOTATO FLAG: [Yes — stat card / Yes — framework diagram / Yes — 3-step process / Yes — quote graphic / No]
+BLOTATO FLAG: [Yes — type / No]
+Customer permission status: [N/A / Confirmed / Awaiting]
 ---
 ```
 
-### Post format — thread
+### Thread format (rare)
 
 ```
 ---
 THREAD [n] — [Topic]
+Pillar: [pillar]
 Type: Thread ([n] posts)
 
 Post 1/[n]:
@@ -165,60 +151,48 @@ Post 2/[n]:
 [copy]
 [n]/500 chars
 
-Post 3/[n]:
-[copy]
-[n]/500 chars
-
 BLOTATO FLAG: [Yes — type, applies to Post [n] / No]
-Note: For threads, apply the Blotato flag to the post in the thread that best suits an infographic treatment — usually Post 1 or the most data-forward post.
+Customer permission status: [N/A / Confirmed / Awaiting]
 ---
 ```
 
 ### Output file
 
-Save to: `outputs/threads/[client-name]-threads-[month]-[year].md`
-
-Create the `outputs/threads/` directory if it does not exist.
+Save to: `outputs/threads/statisfy-threads-[month]-[year].md`. Create `outputs/threads/` if missing.
 
 ### Summary table
 
-After writing the full batch, provide:
-
-| # | Topic | Type | Char count | Blotato Flag |
-|---|-------|------|------------|--------------|
-| 1 | | | | |
-| 2 | | | | |
-
-For threads: show the thread's total post count and the char count of the longest post.
+| # | Topic | Pillar | Type | Char Count | BLOTATO | Permission |
+|---|-------|--------|------|------------|---------|------------|
+| 1 | | | | | | |
 
 ---
 
 ## Phase 5 — Review & Iteration
 
-Present the posts and summary table. Offer:
-
-1. Rewrite a specific post as a thread (break a standalone into a connected series)
-2. Shorten a post further — tighten the language, cut to the core point
-3. Make a post more opinionated — push the take harder
-4. Rewrite with a different angle — same topic, different entry point
-5. Write a version that opens with a question instead of a statement
+Offer:
+1. Shorten further — best Statisfy Threads posts are often well under 300 chars
+2. Sharpen the take
+3. Convert to a thread (only if the idea genuinely needs multiple posts)
+4. Add a question close to drive replies
+5. Cross-back to X — if a Threads post performs, recommend tightening to 280 and running on X
 
 ---
 
 ## Notes for Operators
 
-- **500 characters is a creative constraint, not a frustration.** If a post needs more than 500 characters to make its point, the point needs sharpening. The best Threads posts are often under 200 characters.
-- **Threads is not repurposed Instagram.** The biggest mistake is taking polished lifestyle captions and shortening them. The format, register, and audience behaviour are different. Write for Threads from scratch, not down from Instagram.
-- **Opinion-led content outperforms informational content on Threads.** Tips lists and how-tos belong on Instagram carousels or LinkedIn. Threads rewards takes, observations, and conversation starters.
-- **If no Threads posts exist as reference** — write from the brand's general voice, adapted toward directness. The first batch is a calibration exercise. After one month of engagement data, recalibrate.
-- **Threads scraping is unreliable.** Firecrawl may hit auth walls or rate limits on Threads profiles. If scraping fails, proceed in baseline mode and note the limitation.
-- **The character count shown is the production count.** Trim any post that exceeds 500 before it appears in the output — never show an over-limit post and expect the operator to trim it.
+- **Threads is experimental for Statisfy.** Treat batches as A/B tests with defined success metrics. Don't normalise it into the regular rotation unless engagement data justifies it.
+- **Cross-post first, net-new second.** A high-performing X post with 1–2 sentences added beats a from-scratch Threads post almost every time.
+- **500 chars is room, not an obligation.** A 180-char Statisfy take is still the right answer if it lands. Don't pad.
+- **Same Statisfy voice across all channels.** Don't invent a "Threads voice" — adapt format, hold the voice.
+- **Threads scraping is unreliable.** Firecrawl/Playwright often hit auth walls on Threads. Baseline mode is the norm for this skill.
 
 ---
 
 ## Related Skills
 
-- `/brand-onboarding` — Run first to create `context/brand-style.md` if it doesn't exist
-- `/content-calendar` — Produces the post topics this skill writes Threads posts for
-- `/publisher` — Reads the BLOTATO FLAG field, generates infographics, and schedules posts via Blotato
+- `/x-writer` — Statisfy's secondary primary channel — start here, cross-post to Threads after
+- `/linkedin-writer` — Statisfy's primary channel
+- `/publisher` — Reads BLOTATO FLAG, generates infographics, schedules
+- `/brand-onboarding` — Run first if `context/brand-style.md` is missing
 - `/social-media-manager` — Orchestrates via Route F (Platform-Specific Content)

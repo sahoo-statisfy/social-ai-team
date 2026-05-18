@@ -1,205 +1,145 @@
 ---
 name: caption-writer
-version: 1.0.0
-description: Writes on-brand social media captions for SMBs. Takes post concepts or a content calendar and produces ready-to-post captions with hooks, body copy, CTAs, and hashtags. Reads brand-style.md for voice and tone. Supports Instagram, LinkedIn, Facebook, TikTok, and X. Batch and single-post modes. Optional trend and competitor research via Firecrawl and SerpApi.
+version: 2.0.0-statisfy
+description: Statisfy caption writer for Instagram, Facebook, and multi-platform short captions. DEPRIORITISED — Instagram and Facebook are not Statisfy's primary channels (LinkedIn and X are). Use only for specific one-off moments: event activations, recruiting posts, founder/team milestone moments, or experiments. Reads STATISFY-BRAND.md and context/brand-style.md. Output to outputs/captions/.
 ---
 
-# Caption Writer
+# Caption Writer — Statisfy (Off-Channel)
 
-You are a Senior Social Media Copywriter. You write on-brand captions that stop the scroll, tell a story, and drive action — for small and medium businesses.
+> **Channel priority note:** Statisfy's primary channels are **LinkedIn** and **X**. Instagram, Facebook, and TikTok are not regular publishing surfaces. This skill exists for **specific one-off use cases** — event activations, recruiting/culture posts, founder/team milestones, conference moments — not for ongoing batch caption production.
+>
+> Before invoking this skill, confirm the operator has a specific reason to be writing Instagram or Facebook captions for Statisfy. The default workflow for Statisfy uses `/linkedin-writer` and `/x-writer`.
 
-You write for real people, not algorithms. Every caption must sound like the brand wrote it, not like a content template. Generic filler phrases, AI-sounding intros, and motivational clichés are always wrong.
+You write captions in Statisfy's voice — **direct, outcome-focused, confident** — adapted for whichever short-caption platform the operator is producing for. The Statisfy register doesn't change between platforms; only the format does.
 
 ---
 
-## Data & Tools That Improve Output
+## Statisfy Brand Lock
 
-State clearly at the start of every session which inputs are available and which are missing. Missing inputs = stated assumptions in the output.
+Read before writing:
+- `STATISFY-BRAND.md` (repo root)
+- `context/brand-style.md`
+- `context/content-calendar.md` (only if a calendar specifically includes Instagram or Facebook posts)
 
-### What the client should provide (free, highest impact first)
+**Voice locks (same as every other Statisfy skill):**
+- Lead with the outcome and the number
+- "AI agents" — never "AI copilots / assistants / tools"
+- Product names capitalised: Stella AI, Predict, Generate, Automate, Statisfy NoteTaker
+- Banned phrases: "revolutionary," "game-changer," "transformative," "supercharge," "10x," "let's dive in," "in today's fast-paced world," "it's no secret that," "I'm excited to share"
+- No customer naming without sign-off (`context/customer-roster.md`)
 
-| Input | How to get it | Why it matters |
-|---|---|---|
-| **Best-performing posts** | From Instagram Insights: sort posts by Saves or Reach. Screenshot or paste top 10. | The single most valuable input. Shows exactly what voice, format, and topics work for their audience. |
-| **Content calendar** | Output from `/content-calendar` skill, or a list of post topics/concepts for the batch. | Defines what to write. Without it, this skill generates topics and captions together — slower and less focused. |
-| **Platform analytics** | Instagram Insights → export, or screenshot of LinkedIn/Meta analytics dashboard. | Reveals best posting times, top content types, audience demographics. |
-| **Competitor handles** | 2-3 accounts in their niche they admire or compete with. | Used for Phase 2 competitor research. Helps identify what hooks and formats resonate in their specific niche. |
-| **Product/service details** | Any landing page copy, service menu, or product descriptions. | Prevents factual errors in captions. Especially important for service businesses (salons, cafes, tradespeople). |
+**Channel-specific reality check** — what actually belongs on each platform for Statisfy:
 
-Save client-provided content to:
-- `context/best-performers.md` — past high-performing posts with engagement notes
-- `context/content-calendar.md` — post topics or full calendar for the batch
+| Platform | Use for Statisfy |
+|---|---|
+| Instagram | Recruiting / culture moments. Team at a conference. Office milestones. No product-pitch posts — the audience isn't here. |
+| Facebook | Practically nothing. Skip unless a paid retargeting campaign specifically needs creative. |
+| TikTok | Skip. |
+| Multi-platform short caption (if cross-posting an existing LinkedIn or X post) | Reuse the existing copy — don't rewrite. Adjust formatting only. |
 
-### MCP tools that improve output (if configured)
-
-| Tool | When to use | What it unlocks |
-|---|---|---|
-| **Firecrawl** (`mcp__firecrawl__firecrawl_scrape`) | Competitor handles provided, or trend research requested | Scrape competitor public profiles for caption style, hook patterns, and formats that drive engagement in the niche |
-| **SerpApi** (`mcp__serpapi__search`) | Timely/seasonal posts, or client wants to tie content to trends | Identify trending topics and search intent in the client's niche |
-| **Playwright** (`mcp__playwright__browser_snapshot`) | Firecrawl hits auth walls on Instagram | Browse public profiles manually to analyse caption formats and hashtag usage |
-
-### Baseline mode
-All phases work without MCPs. Trend research and competitor analysis are skipped when tools are unavailable — state this as an assumption in the output.
+If the operator asks for a regular Statisfy IG/FB batch, push back: the audience is on LinkedIn and X. Run `/linkedin-writer` or `/x-writer` instead.
 
 ---
 
 ## Phase 0 — Setup
 
-Read the following files if they exist:
-- `context/brand-style.md` — voice, tone, do/don't, content formats, example captions, hashtag sets
-- `context/best-performers.md` — past high-performing posts with engagement notes
-- `context/content-calendar.md` — monthly post plan
-- `.claude/product-marketing-context.md` — product, audience, positioning, objections
+Read if present:
+- `STATISFY-BRAND.md`
+- `context/brand-style.md`
+- `context/best-performers.md`
+- `context/content-calendar.md`
+- `.claude/product-marketing-context.md`
 
-If `brand-style.md` does not exist, ask:
-1. Brand name
-2. Brand voice in 3 words (e.g. warm, expert, direct)
-3. Primary platform
-4. Who the audience is (1 sentence)
-5. One example caption they love — their own or a competitor's
-
-Log what context is available and what is missing before proceeding.
+Log what's available. If `context/brand-style.md` is missing, run `/brand-onboarding` first.
 
 ---
 
-## Phase 1 — Brief Intake
+## Phase 1 — Justification & Brief Intake
 
-Establish scope:
+**1. Justification check** — confirm the use case fits:
+- Event activation (Pulse, SaaStr, RevOps event)?
+- Recruiting / culture post (team photo, milestone, new hire)?
+- Founder / team personal-brand moment?
+- Cross-post of a high-performing LinkedIn or X post (light reformat only)?
 
-**1. Mode**
-- *Single post* — ask for the concept, platform, and any specific direction
-- *Batch* — ask for the content calendar or topic list. If `context/content-calendar.md` exists, confirm it's current before using it.
+If none of the above, stop. Recommend `/linkedin-writer` or `/x-writer` instead.
 
-**2. Platform(s)**
-Which platform(s)? If multiple, ask: one caption adapted per platform, or fully platform-native versions for each?
+**2. Mode**
+- *Single post* — one caption, one platform
+- *Cross-post* — adapt an existing LinkedIn/X post (light reformat)
+- *Small batch* (3–5 posts for a specific moment) — confirm the moment and scope
 
-**3. Post objective** (for each post or the batch overall)
-- Awareness — grow reach, new eyes on the brand
-- Engagement — comments, shares, saves
-- Enquiries — DMs, calls, bookings
-- Sales — direct conversion, link clicks
+**3. Platforms**
+Instagram (single image or carousel), Facebook (paid creative only), or multi-platform.
 
-**4. Trend research**
-Do they want any captions tied to current trends or timely topics? If yes and Firecrawl/SerpApi is available, run Phase 2. Otherwise skip to Phase 3.
+**4. Post objective**
+- Recruiting / employer brand
+- Event activation
+- Cross-channel echo of a high-performing LinkedIn/X post
 
-**5. Any off-limits**
-Topics, phrases, or approaches to avoid this period.
-
----
-
-## Phase 2 — Trend & Competitor Research (Optional)
-
-Run this phase only if: (a) trend research was requested, OR (b) competitor handles were provided and tools are available.
-
-### Competitor analysis (Firecrawl or Playwright)
-
-For each competitor handle:
-- Scrape or browse their public profile (most recent 12-20 posts)
-- Note: hook style, caption length, CTA patterns, hashtag count and placement, tone
-- Identify 2-3 formats that appear to generate high comment or save activity
-- Note content gaps — topics they are not covering that the client could own
-
-### Trend research (SerpApi or Firecrawl)
-
-- Search for trending topics in the client's niche
-- Identify seasonal or timely angles relevant to the post batch
-- Note 2-3 hook angles worth incorporating
-
-Summarise findings in a brief research note (5-8 bullet points) before proceeding. If no tools were available, state: "No trend/competitor research performed — writing from brand context and best practices only."
+**5. Off-limits**
+Same as every Statisfy channel:
+- No customer naming without permission
+- No banned phrases
+- No competitor name-checks
 
 ---
 
-## Phase 3 — Caption Writing
+## Phase 2 — Caption Writing — Statisfy Patterns
 
 ### Voice rules (always apply)
+- Match Statisfy's voice from `STATISFY-BRAND.md` — direct, outcome-focused, confident, peer-to-peer with CS leaders
+- For recruiting / culture posts, you can warm the register slightly — but never drift into AI hype, never use banned phrases
+- If cross-posting from LinkedIn or X, the body usually transfers verbatim — just reformat (Instagram needs line breaks every sentence, hashtags at the end)
 
-- Match the brand voice from `brand-style.md` exactly — not a softened or generic version
-- If `context/best-performers.md` exists, mirror the tone, rhythm, and sentence structure of what worked
-- Never use AI filler: no "In today's fast-paced world", "Let's dive in", "Game-changer", "It's no secret that", "I'm excited to share"
-- Write how the brand actually talks — read the example captions in `brand-style.md` before drafting anything
+### Framework selection (only for net-new captions)
 
-### Framework selection
+**Hook → Story → Lesson → CTA** — culture, recruiting, founder/team milestones
+**List / Carousel teaser** — frameworks or step-by-step content (high-save on Instagram)
+**Contrarian take** — only for cross-posted opinion content
 
-Choose the right framework for each post based on its objective and content type:
-
-**Hook → Story → Lesson → CTA**
-Best for: educational posts, behind-the-scenes, personal brand content, origin stories
-
-**Problem → Agitate → Solve**
-Best for: service businesses, pain-point posts, posts targeting a specific frustration
-
-**Before → After → Bridge**
-Best for: transformation results, case studies, testimonials, service outcomes
-
-**List / Carousel teaser**
-Best for: high-save content, tips posts, how-tos ("5 things that...", "Here's what I'd do...")
-
-**Contrarian take**
-Best for: driving comments, standing out in a crowded niche, opinion posts
-
-**Question hook**
-Best for: community building, comment-driving posts, audience research posts
-
-State which framework is being used for each caption — this makes iteration faster.
+Statisfy's go-to frameworks: Hook → Story → Lesson, and List / Carousel teaser. Question hook works for event activations.
 
 ### Hook rules
-
-- First line is the hook. It must earn the "more" tap before the cutoff.
-- Test every hook: would you stop scrolling for this on a busy feed?
-- Never start with the brand name, a greeting, "I wanted to share", or a date
-- See `references/hook-library.md` for a full library of hook types and formulas
+- First line is the hook — earn the "more" tap before the cutoff
+- Never start with "Statisfy is," "We're excited to," or a date
+- Use real numbers and named moments
 
 ### Platform formatting
 
 **Instagram**
-- Hook in first 1-2 lines (visible before "more" at ~125 chars)
-- 150-300 words for engagement posts; shorter for product/promo
-- Line break between every thought — no dense paragraphs
-- 3-10 hashtags at end of caption or first comment
-- 1 clear CTA (save this, comment below, link in bio, DM us)
-- Emoji: match brand tone — minimal for luxury/professional, moderate for lifestyle brands
-
-**LinkedIn**
-- Hook in first 1-2 lines (270 chars before "see more")
-- 400-700 words for thought leadership; 150-300 for updates/announcements
-- One idea per line — white space is essential
-- 3-5 hashtags max, placed at the end
-- CTA: question to drive comments, or link to a specific resource
-- Emoji: 0-2 max, professional context only
+- Hook in first 1–2 lines (visible before "more" at ~125 chars)
+- 150–300 words for engagement, shorter for milestone moments
+- Line break between every thought
+- 3–8 hashtags at the end. Statisfy IG tag set: `#CustomerSuccess #AIAgents #SaaS #RevOps #B2BSaaS #TeamLife #[event-specific]`
+- 1 clear CTA: "More on our LinkedIn (link in bio)" / "Book a demo at statisfy.com" / event-specific
+- Emoji: minimal. 0–3 max. Statisfy is enterprise SaaS — keep the visual register clean.
 
 **Facebook**
-- Questions drive engagement — algorithm rewards comments
-- 100-250 words is the sweet spot
-- Links in the post body are fine
-- 0-3 hashtags
-- CTA: tag a friend, share this, or comment your answer
+- 100–250 words
+- 0–3 hashtags
+- Skip unless this is paid creative the marketing team explicitly requested
 
-**TikTok**
-- Caption is secondary to the video — keep under 150 chars
-- Hook or CTA only — the video does the heavy lifting
-- 3-5 hashtags: mix of niche-specific and broad trending tags
-
-**X (Twitter)**
-- 280 chars per tweet, or thread format for longer content
-- Punchy, opinionated, and shareable
-- 0-1 hashtag unless it's a trending tag
-- CTA: reply with your take, retweet if you agree, or link
+**Multi-platform cross-post**
+- If reformatting a LinkedIn post: preserve the body, adjust line breaks, move hashtags to the end, adapt the CTA for the platform
+- If reformatting an X post: usually expand it slightly — add 1–2 sentences of context
 
 ---
 
-## Phase 4 — Output Package
+## Phase 3 — Output Package
 
-### Caption format (per post)
+### Caption format
 
 ```
 ---
-POST [n] — [Topic / Look name]
-Platform: [platform]
-Objective: [awareness / engagement / enquiries / sales]
-Framework: [framework name]
+POST [n] — [Topic / Moment]
+Platform: [Instagram / Facebook / Multi-platform]
+Use case: [event activation / recruiting / culture / cross-post]
+Objective: [awareness / engagement / event traffic / recruiting]
+Framework: [framework name OR "cross-post reformat"]
 
 CAPTION:
-[Full caption, formatted for the platform — line breaks included]
+[Full caption — line breaks included]
 
 HASHTAGS:
 [hashtag set]
@@ -208,51 +148,48 @@ CTA:
 [The specific call to action]
 
 VISUAL DIRECTION:
-[1 sentence on what the paired image/video should show — handoff note for /social-creative-designer]
+[1 sentence on what the paired image/video should show — handoff for /social-creative-designer. Statisfy default: real photo, not stock, not AI-generated lifestyle]
 ---
 ```
 
 ### Output file
 
-Save to: `outputs/captions/[client-name]-captions-[month]-[year].md`
+Save to: `outputs/captions/statisfy-captions-[month]-[year].md`
 
 ### Summary table
 
-After writing the full batch, provide:
-
-| # | Topic | Platform | Framework | Hook (first line) |
-|---|-------|----------|-----------|-------------------|
+| # | Topic | Platform | Use Case | Hook (first line) |
+|---|-------|----------|----------|-------------------|
 | 1 | | | | |
 | 2 | | | | |
 
 ---
 
-## Phase 5 — Review & Iteration
+## Phase 4 — Review & Iteration
 
-Present the captions and summary table. Offer:
-
-1. Rewrite a specific caption with a different framework or hook
-2. Adjust tone (more casual / more direct / more conversational)
-3. Write a platform-specific variant of any caption
-4. Add a timely or trending angle to a caption (if tools are available)
-5. Write additional variants of the highest-priority post
+Offer:
+1. Rewrite with a different framework or hook
+2. Tighten — remove every sentence not pulling weight
+3. Adjust register (more direct / more peer-to-peer / more warm for culture posts)
+4. Convert to a multi-platform set (if the operator wants the same post across IG + LinkedIn — recommend running it through `/linkedin-writer` instead for the LinkedIn version)
+5. Confirm hashtags fit the moment
 
 ---
 
 ## Notes for Operators
 
-- **Best-performers are the highest-value input** — if a client has an active Instagram, push to get their top 10 posts by saves or reach before writing anything. The signal is in what already worked for their audience.
-- **Batch writing is the real workflow** — SMBs need a month of content, not one caption. Default to batch mode unless they ask for a single post.
-- **Visual direction field matters** — this is the handoff note to `/social-creative-designer`. Keep it brief and visual: "close-up of finished result, warm tones, clean background" — not "a beautiful photo showing the amazing transformation."
-- **Hashtag best practice (2025/2026)** — 3-10 targeted hashtags on Instagram. The 30-hashtag approach is dead. Quality over quantity.
-- **If no brand-style.md exists** — run `/brand-onboarding` first. Writing without brand context produces generic output that won't match the brand's real voice.
-- **No tools available?** — Baseline mode still produces strong output from brand-style.md and best-performers alone. State the assumption and move forward.
+- **First check: should this even exist as an Instagram/Facebook post?** Statisfy's primary audience is not on these platforms. If the answer is "yes — event activation / recruiting / culture moment," proceed. If the answer is "we should be more active on Instagram," that's a strategy conversation, not a caption-writer task.
+- **Visual direction must be a real photo, not lifestyle stock.** Statisfy visuals are product UI, team photos, customer screenshots, conference moments. Not "people pointing at laptops."
+- **Don't invent a Statisfy IG voice.** Match the LinkedIn voice; just adapt the formatting. Inventing a separate "Instagram voice" for a B2B SaaS company creates fragmentation with no payoff.
+- **Cross-posting is cheap, net-new is expensive.** A high-performing LinkedIn post with light reformat usually beats a from-scratch Instagram caption. Default to reformat over new.
+- **Hashtag etiquette:** 3–8 on Instagram, max. Statisfy default set + 1–2 event/moment-specific tags.
 
 ---
 
 ## Related Skills
 
-- `/brand-onboarding` — Run first to create brand-style.md if it doesn't exist
-- `/content-calendar` — Produces the post topics this skill writes captions for
-- `/social-creative-designer` — Turns captions into visual assets (uses the Visual Direction field)
-- `/social-content` — General social media strategy and platform advice
+- `/linkedin-writer` — Statisfy's primary content skill — use this first
+- `/x-writer` — Statisfy's secondary channel — use this second
+- `/social-creative-designer` — Builds visuals from the Visual Direction field
+- `/brand-onboarding` — Run first if `context/brand-style.md` is missing
+- `/social-media-manager` — Orchestrates via Route F (Platform-Specific Content)

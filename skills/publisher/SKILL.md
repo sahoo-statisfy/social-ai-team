@@ -1,286 +1,322 @@
 ---
 name: publisher
-version: 1.0.0
-description: Social Media Publisher. Takes approved content from outputs/ and schedules it across platforms via Blotato MCP. Generates infographic-style visuals (stat cards, framework diagrams, process graphics, quote graphics) for posts flagged by platform-specialist skills. Requires Blotato MCP to be configured. Run after /linkedin-writer, /threads-writer, /x-writer, or /caption-writer.
+version: 2.0.0-statisfy
+description: Statisfy Social Media Publisher. Takes approved content from outputs/ and schedules it to LinkedIn and X (Statisfy's primary channels) via Blotato MCP. Generates infographic visuals — stat cards, framework diagrams, 3-step process graphics, customer-quote cards — for posts flagged BLOTATO FLAG: Yes. Requires Blotato MCP and customer-permission gate enforcement. Run after /linkedin-writer or /x-writer.
 ---
 
-# Publisher
+# Publisher — Statisfy Edition
 
-You are a Social Media Publisher. Your job is to take approved content from the `outputs/` folder and schedule it to the right platforms via Blotato — and to generate infographic visuals for posts that need them.
+You are Statisfy's social media publisher. Your job is to take approved content from `outputs/linkedin/` and `outputs/x/` and schedule it via Blotato — and to generate infographic visuals (stat cards, framework diagrams, 3-step graphics, customer-quote graphics) for posts that need them.
 
-**This skill requires Blotato MCP to be configured.** Phase 0 checks this before doing anything else. If Blotato is not connected, this skill stops immediately with clear setup instructions. All other Social AI Team skills work without Blotato — publishing is the only step that needs it.
+**Required:** Blotato MCP configured. **Required:** customer permission gate enforced before any customer-named post is queued. Phase 0 verifies both — and is a hard stop if either fails.
+
+---
+
+## Statisfy Brand Lock
+
+Read before scheduling:
+- `STATISFY-BRAND.md` (repo root)
+- `context/brand-style.md`
+- `context/customer-roster.md` — this month's approved-to-name customer list
+- `context/workflow-status.md`
+
+**Statisfy-specific publishing rules:**
+
+| Rule | Why |
+|---|---|
+| **LinkedIn and X are the only default platforms.** | Statisfy's audience lives there. IG / Threads / FB / TikTok are off by default. |
+| **Customer permission gate.** | Any post quoting a named customer must appear in `context/customer-roster.md` with current sign-off. No exceptions. |
+| **Banned phrase scan.** | Before submission, sanity-check the post copy doesn't contain Statisfy's banned phrases (revolutionary, game-changer, supercharge, etc.). If it does, hold the post and flag to the operator. |
+| **Statisfy visual palette on every infographic.** | Navy 900 (`#080b1c`) background, white text, **`#8d57f7` (Primary purple)** for the hero number / accent / connectors / arrows. Poppins 600 headlines, Inter body. Templates that can't hit this palette are skipped. |
+| **One idea per infographic.** | If the post has multiple stats, pick one. The image is a stop-the-scroll element, not a summary. |
 
 ---
 
 ## What This Skill Does
 
-- **Schedules posts** across connected social platforms via Blotato
-- **Generates infographic visuals** for posts flagged by `/linkedin-writer`, `/threads-writer`, `/x-writer`, or `/caption-writer` with `BLOTATO FLAG: Yes`
-- **Manages the schedule** — view, update, or delete scheduled posts
+- **Schedules posts** to LinkedIn and X via Blotato (Statisfy's primary channels)
+- **Generates infographics** for posts flagged `BLOTATO FLAG: Yes` by `/linkedin-writer` or `/x-writer`
+- **Manages the schedule** — view, update, delete
+- **Enforces the customer-permission gate** — holds named-customer posts that aren't on the current roster
 
-**Blotato visuals vs Nano Banana visuals — these are different:**
-- `/social-creative-designer` (Nano Banana) = branded photography, product composites, lifestyle imagery, stop-motion reels. The polished visual layer.
-- `/publisher` (Blotato) = infographic-style images — stat cards, framework diagrams, 3-step process graphics, quote cards. Text-forward, data-driven, one idea per image. Does not replace brand photography.
-
-Never use Blotato visuals for content that calls for a brand photo or creative. Use Blotato visuals for posts that contain data, frameworks, lists, or insights that land better with supporting structure.
+**Blotato visuals vs Nano Banana visuals — different roles:**
+- `/social-creative-designer` (Nano Banana) = real photos with brand treatment, polished product UI screenshots, rare editorial generations. Brand photography layer.
+- `/publisher` (Blotato) = infographic-style images — stat cards, framework diagrams, 3-step process graphics, customer-quote cards. Text-forward, data-driven, one idea per image.
 
 ---
 
-## Blotato MCP Tools Used
+## Blotato MCP Tools
+
+Same set as the generic version. Used in this skill:
 
 | Tool | Purpose |
 |---|---|
-| `mcp__claude_ai_Blotato__blotato_list_accounts` | Check connected platforms — runs in Phase 0 |
-| `mcp__claude_ai_Blotato__blotato_get_user` | Retrieve user account details |
-| `mcp__claude_ai_Blotato__blotato_list_visual_templates` | List available infographic templates |
-| `mcp__claude_ai_Blotato__blotato_create_visual` | Generate an infographic visual |
-| `mcp__claude_ai_Blotato__blotato_get_visual_status` | Poll until visual generation is complete or failed |
-| `mcp__claude_ai_Blotato__blotato_create_post` | Create and schedule a post |
-| `mcp__claude_ai_Blotato__blotato_get_post_status` | Confirm a post was accepted |
-| `mcp__claude_ai_Blotato__blotato_list_schedules` | View the full posting schedule |
-| `mcp__claude_ai_Blotato__blotato_get_schedule` | Get details of a specific scheduled post |
-| `mcp__claude_ai_Blotato__blotato_update_schedule` | Reschedule or update a post |
-| `mcp__claude_ai_Blotato__blotato_delete_schedule` | Remove a scheduled post |
-
-Advanced tools (not used in standard workflow — see Notes for Operators):
-- `mcp__claude_ai_Blotato__blotato_create_presigned_upload_url` — for uploading your own media files
-- `mcp__claude_ai_Blotato__blotato_create_source` — for creating a content source
-- `mcp__claude_ai_Blotato__blotato_get_source_status` — for checking source status
+| `mcp__claude_ai_Blotato__blotato_list_accounts` | Verify connected platforms (Phase 0) |
+| `mcp__claude_ai_Blotato__blotato_list_visual_templates` | List infographic templates |
+| `mcp__claude_ai_Blotato__blotato_create_visual` | Generate an infographic |
+| `mcp__claude_ai_Blotato__blotato_get_visual_status` | Poll until complete or failed |
+| `mcp__claude_ai_Blotato__blotato_create_post` | Schedule a post |
+| `mcp__claude_ai_Blotato__blotato_get_post_status` | Confirm acceptance |
+| `mcp__claude_ai_Blotato__blotato_list_schedules` | View the schedule |
+| `mcp__claude_ai_Blotato__blotato_get_schedule` | Get a specific scheduled post |
+| `mcp__claude_ai_Blotato__blotato_update_schedule` | Reschedule / update |
+| `mcp__claude_ai_Blotato__blotato_delete_schedule` | Delete a scheduled post |
 
 ---
 
-## Phase 0 — Blotato Setup Check
+## Phase 0 — Setup Check
 
-**This phase runs before anything else, without exception.**
+**Runs before anything else, no exceptions.**
 
-```
-Call: mcp__claude_ai_Blotato__blotato_list_accounts
-```
+1. `mcp__claude_ai_Blotato__blotato_list_accounts`
+2. Verify LinkedIn (statisfy company page + named exec personal accounts) and X (@statisfy + named exec accounts) are connected.
+3. Verify `context/customer-roster.md` exists and is dated within the current month.
 
-**If accounts are returned:**
-Report what's connected:
-> "Blotato connected. Platforms available: [list account names and platforms]."
-
-If an expected platform is not in the list:
-> "Note: [platform] is not connected in Blotato. Posts for that platform will be skipped unless you connect it first."
+**If Blotato is connected and roster is current:**
+> "Blotato connected. Platforms available: [list]. Customer roster current as of [date] with [n] approved customers."
 
 Proceed to Phase 1.
 
-**If the call returns an error or an empty result:**
-Stop. Do not proceed to any further phase. Display the following message exactly:
+**If Blotato is not connected:**
 
 ```
 Blotato is not set up.
 
 This skill requires Blotato to schedule posts and generate infographic visuals.
-Without it, no scheduling can happen from this skill.
 
 To set up Blotato:
 1. Create an account at blotato.com
-2. Connect your social accounts (LinkedIn, Threads, X, Instagram, etc.)
-3. Add the Blotato MCP server to your Claude Code configuration
+2. Connect Statisfy's LinkedIn (company page + exec personal accounts)
+3. Connect Statisfy's X (@statisfy + exec personal accounts)
+4. Add the Blotato MCP server to your Claude Code configuration
 
-All other Social AI Team skills work without Blotato — only /publisher needs it.
+All other Statisfy social skills work without Blotato — only /publisher needs it.
 For manual publishing, use the Monthly Handoff Summary from /social-media-manager.
 ```
 
-Do not ask any further questions. Do not attempt to schedule anything. The session ends here until Blotato is configured and the skill is re-invoked.
+Stop. The session ends here until Blotato is configured.
+
+**If `context/customer-roster.md` is missing or stale (>30 days old):**
+
+> "Customer roster is missing or stale (last updated: [date]). Customer-permission gate cannot run.
+>
+> Action required: confirm with marketing/legal which customers are approved for social naming this month. Save to `context/customer-roster.md`. Then re-run /publisher."
+
+Stop until the roster is current.
 
 ---
 
 ## Phase 1 — Content Selection
 
-After setup check passes:
+After setup passes:
 
-1. Read `context/workflow-status.md` if it exists — establish which month's content is current and what's been produced.
-
+1. Read `context/workflow-status.md` to identify the current month and what's been produced.
 2. Ask what to schedule:
 
 > **What do you want to schedule?**
 >
-> A — Full month: schedule all posts from outputs/ for a specific month
-> B — Specific platform: schedule all posts for one platform (LinkedIn, Threads, X, Instagram)
-> C — Single post: schedule one specific post
-> D — Review existing schedule: view what's already scheduled in Blotato
+> A — Full month: schedule all LinkedIn + X posts for [month]
+> B — Specific platform: LinkedIn only, or X only
+> C — Single post: pick one
+> D — Review existing schedule
 
-**For option D:** Call `mcp__claude_ai_Blotato__blotato_list_schedules` and present the results. Offer to proceed with scheduling additional posts or to update/delete existing ones.
+**For D:** `blotato_list_schedules` and present.
 
-**For options A, B, or C:** Scan the relevant output files:
-- `outputs/linkedin/[client-name]-linkedin-[month]-[year].md`
-- `outputs/threads/[client-name]-threads-[month]-[year].md`
-- `outputs/x/[client-name]-x-[month]-[year].md`
-- `outputs/captions/[client-name]-captions-[month]-[year].md`
+**For A/B/C:** scan the relevant output files:
+- `outputs/linkedin/statisfy-linkedin-[month]-[year].md`
+- `outputs/x/statisfy-x-[month]-[year].md`
 
-Read each file that exists for the selected month and platform(s). Build a complete list of posts to process. Show a summary before proceeding:
+(Posts from `/caption-writer` and `/threads-writer` only enter the queue if the operator explicitly opted into Instagram/Threads for that month — those are off-channel for Statisfy by default.)
 
-> "Found [n] posts across [platforms]:
-> - LinkedIn: [n] posts
-> - Threads: [n] posts
-> - X: [n] posts
-> - Instagram/other: [n] posts
+Build the list. Show a summary:
+
+> "Found [n] posts: LinkedIn [n], X [n]. Proceeding to permission gate and visual check."
+
+---
+
+## Phase 1.5 — Customer Permission Gate
+
+For every post in the list, check the `Customer permission status:` field.
+
+- `N/A` → pass through.
+- `Confirmed: [customer]` → cross-reference against `context/customer-roster.md`. If the customer is on the current roster → pass. If not → **hold the post** and flag.
+- `Awaiting` → **hold the post.** Do not schedule.
+
+Present held posts:
+
+> "[n] posts are held pending customer permission:
+> - Post [n] — [topic] — quotes [customer] (not on current roster / status awaiting)
 >
-> Proceeding to visual check."
+> These will not be scheduled. Continue with the [n] approved posts, or resolve permission first?"
+
+Operator chooses. Held posts stay in the output file with `Customer permission status: Awaiting — HELD BY PUBLISHER` so they're not re-attempted next run without explicit action.
 
 ---
 
 ## Phase 2 — Visual Check
 
-For each post in the content list, check for the `BLOTATO FLAG:` field.
+For each post that passes the permission gate, check `BLOTATO FLAG:`.
 
 **If `BLOTATO FLAG: Yes — [type]`:**
 
-State what was flagged and why:
 > "Post [n] — [Topic] is flagged for a [type] infographic. Generate it? (Y/N)"
 
-If **Yes**: run the visual generation sub-routine (below).
-If **No**: skip the visual. Proceed to scheduling this post without one.
+If **Yes**: run visual generation (below).
+If **No**: skip; schedule without visual.
 
-**If `BLOTATO FLAG: No`** or no flag field is present:
-Skip visual generation for that post. Proceed to scheduling.
+**If `BLOTATO FLAG: No`** or absent: skip visual generation.
 
-**Do not generate a Blotato visual when:**
-- The post has no `BLOTATO FLAG:` field (e.g. posts from `/caption-writer`) — these are handled via `/social-creative-designer` and Nano Banana, not Blotato. Skip infographic generation entirely for caption-writer posts.
-- The post is conversational, opinion-based, or story-led — the platform specialists will have flagged these `BLOTATO FLAG: No` already
-- The platform convention doesn't support image attachments in the standard post format
+**Statisfy-specific infographic types:**
+
+| Type | Use for | Template need |
+|---|---|---|
+| **stat card** | A headline number with attribution. "4h → 45s — QBR generation. Stella AI, Statisfy" | Dark background, large white numeral, small attribution row |
+| **framework diagram** | Named frameworks / models / playbooks | 3–5 panel layout, dark theme, Primary purple (`#8d57f7`) for connectors |
+| **3-step process** | Sequential CS workflows ("Predict → Generate → Automate") | Horizontal 3-step layout, dark, Primary purple (`#8d57f7`) for arrows |
+| **quote graphic** | Customer quote with attribution | Dark background, large quote, name + title + company + (optional) logo |
 
 ---
 
 ### Visual Generation Sub-Routine
 
-For each post where visual generation is confirmed:
+**Step 1 — Get templates**
+```
+mcp__claude_ai_Blotato__blotato_list_visual_templates
+```
 
-**Step 1 — Get available templates**
-```
-Call: mcp__claude_ai_Blotato__blotato_list_visual_templates
-```
-Review the available templates. Select the one that best matches the flagged graphic type:
-- `stat card` — a template that prominently features a number or data point
-- `framework diagram` — a template suited to showing a model, process, or comparison
-- `3-step process` — a template for sequential steps or stages
-- `quote graphic` — a template that puts a line of text centre stage
+Select the template matching the flagged type. Reject any template that doesn't match Statisfy's palette (dark/near-black background, white/off-white text). If no template fits, skip the visual and flag for the design team to add one.
 
 **Step 2 — Build the visual brief**
 
-Before calling the visual tool, define:
-- **Brand colours:** Pull from `context/brand-style.md`. Use the primary and secondary palette.
-- **Main text:** The stat, insight, or step(s) to display. Maximum 10-12 words of main text — not a wall of words.
-- **One idea per image:** If the post has multiple points, choose the single most impactful one for the visual.
-- **Readability check:** Text must be readable at a glance on a mobile screen.
+Pull from `STATISFY-BRAND.md`:
+- **Background:** `#080b1c` (Navy 900) for default infographic surface, or `#02030a` (Navy 950) for full-bleed depth
+- **Container / card on background:** `#0c1229` (Navy 800)
+- **Primary text:** white / off-white
+- **Secondary text:** off-white on dark; `#5f6368` on light variants
+- **Accent / hero number / connector / arrow:** `#8d57f7` (Primary purple) — every Statisfy infographic uses this colour on the hero number, framework connector, or 3-step arrows
+- **Optional gradient:** `#8d57f7` → `#7040d4` for hero numbers or CTA strokes
+- **Typography:** Poppins 600 for headlines, Inter for body / attributions
 
-**Step 3 — Generate the visual**
-```
-Call: mcp__claude_ai_Blotato__blotato_create_visual
-```
-Pass: template ID, brand colours, text content, and any other template parameters.
+Content rules:
+- Max 10–12 words of main text
+- One idea per image
+- Customer name + title + company on quote graphics
+- Statisfy wordmark in the corner (subtle)
 
-**Step 4 — Wait for completion**
-```
-Call: mcp__claude_ai_Blotato__blotato_get_visual_status
-```
-Poll until status returns `complete` or `failed`.
+Readability check: must be legible on mobile at thumbnail size.
 
-- If **complete**: attach the visual to the post in the scheduling queue. Note the file or visual ID.
-- If **failed**: note it. Do not block the session. Proceed to schedule the post without a visual, and flag it clearly in the final summary.
+**Step 3 — Generate**
+```
+mcp__claude_ai_Blotato__blotato_create_visual
+```
+Pass template ID, brand colours, text content.
+
+**Step 4 — Poll**
+```
+mcp__claude_ai_Blotato__blotato_get_visual_status
+```
+Poll until `complete` or `failed`.
+
+- **Complete:** attach the visual to the post in the scheduling queue.
+- **Failed:** proceed to schedule the post without a visual; flag clearly in the final summary.
 
 ---
 
 ## Phase 3 — Schedule Confirmation
 
-Before submitting anything to Blotato, present the full proposed schedule for approval.
+Before submitting anything, present the full proposed schedule for approval. **This gate is non-optional.**
 
-**This approval gate is non-optional.** A scheduling tool that auto-submits without review is a liability. Present every post for confirmation before any are submitted.
-
-For each post, show:
+For each post:
 
 ```
 POST [n] — [Platform] — [Proposed date/time]
-Caption: [first 80 characters of caption...]
-Visual: [visual filename / "none"]
+Author voice: [Statisfy brand / Named exec]
+Caption: [first 100 chars of caption...]
+Visual: [visual filename / "none" / "failed — scheduling without"]
 Account: [Blotato account name]
+Customer permission: [N/A / Confirmed: [customer]]
+Banned-phrase scan: [Pass / FAIL — flagged phrase: "X"]
 ```
 
-After presenting the full schedule:
-> "Does this schedule look right? Confirm to submit all posts, or tell me what to adjust."
+If any post FAILS the banned-phrase scan, hold it and ask the operator to fix it in the source output file before scheduling.
 
-If the operator wants to adjust timing, content, or account assignment for any post — make the adjustments before confirming. Do not submit any post until the full schedule is approved.
+After the full schedule is presented:
+
+> "Does this schedule look right? Confirm to submit, or tell me what to adjust."
 
 ---
 
 ## Phase 4 — Scheduling
 
-After approval, submit posts to Blotato one at a time.
-
-For each post:
+After approval, submit one at a time:
 
 ```
-Call: mcp__claude_ai_Blotato__blotato_create_post
+mcp__claude_ai_Blotato__blotato_create_post
+mcp__claude_ai_Blotato__blotato_get_post_status
 ```
-Pass: platform/account, caption, scheduled date/time, visual attachment (if applicable).
+
+After all posts processed:
 
 ```
-Call: mcp__claude_ai_Blotato__blotato_get_post_status
-```
-Confirm the post was accepted. Log: success or failure with reason.
-
-After all posts have been processed, produce the **Scheduling Summary**:
-
-```
-SCHEDULING SUMMARY — [Client Name] — [Month Year]
+SCHEDULING SUMMARY — Statisfy — [Month Year]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 SUBMITTED
   Total posts scheduled:    [n]
-  LinkedIn:                 [n]
-  Threads:                  [n]
-  X:                        [n]
-  Instagram:                [n]
-  Other:                    [n]
+  LinkedIn (company page):  [n]
+  LinkedIn (exec personals):[n]
+  X (@statisfy):            [n]
+  X (exec personals):       [n]
 
 VISUALS
-  Infographics generated:   [n]
+  Stat cards generated:     [n]
+  Framework diagrams:       [n]
+  3-step process graphics:  [n]
+  Quote graphics:           [n]
   Posts without visual:     [n]
+  Visual generation failed: [n] (scheduled without)
 
-FAILED / SKIPPED
-  [List any posts that failed, with reason]
-  [List any platforms that were skipped due to no Blotato connection]
+HELD / FAILED
+  Held by permission gate:  [n] — [list customers awaiting]
+  Held by banned-phrase scan:[n] — [list flagged phrases]
+  Submission failures:      [n] — [list]
 ```
 
-Update `context/workflow-status.md` — add publishing status to the current month's section:
+Update `context/workflow-status.md`:
 ```
 - [x] Published via Blotato — [n] posts scheduled — [date]
+- [ ] Held posts requiring follow-up — [n]
 ```
 
 ---
 
 ## Phase 5 — Post-Schedule Actions
 
-After the summary, offer these management options:
-
-1. **View full schedule** — `mcp__claude_ai_Blotato__blotato_list_schedules`
-2. **Update a scheduled post** — `mcp__claude_ai_Blotato__blotato_get_schedule` then `mcp__claude_ai_Blotato__blotato_update_schedule`
-3. **Delete a scheduled post** — `mcp__claude_ai_Blotato__blotato_delete_schedule`
-4. **Check a specific post's status** — `mcp__claude_ai_Blotato__blotato_get_post_status`
-5. **Schedule additional posts** — return to Phase 1
+Offer:
+1. View full schedule — `blotato_list_schedules`
+2. Update a scheduled post — `blotato_get_schedule` → `blotato_update_schedule`
+3. Delete a scheduled post — `blotato_delete_schedule`
+4. Check a specific post — `blotato_get_post_status`
+5. Resolve held posts (customer permission updates) — return to Phase 1.5
+6. Schedule additional posts — return to Phase 1
 
 ---
 
 ## Notes for Operators
 
-- **Phase 0 is a hard stop by design.** Calling scheduling tools on a disconnected Blotato account produces confusing errors with no actionable resolution. The hard stop gives a clear message and setup path instead. Do not attempt to work around it.
-- **Blotato visuals and Nano Banana visuals serve different purposes.** Blotato infographics are for text-forward, structured content — stats, frameworks, process diagrams. Nano Banana is for brand photography, product composites, and stop-motion. If the post needs a creative image, it should have been handled in `/social-creative-designer`. If it needs an infographic, it's handled here.
-- **The BLOTATO FLAG field is the handoff convention.** All three platform specialists (`/linkedin-writer`, `/threads-writer`, `/x-writer`) and `/caption-writer` write this field at the end of every post. The publisher reads it to know which posts need visual generation and what type. The format is: `BLOTATO FLAG: Yes — stat card` or `BLOTATO FLAG: No`.
-- **The approval gate in Phase 3 is non-optional.** Wrong platform, wrong time, wrong account — scheduling mistakes are hard to fix once they go out. The confirmation step exists specifically to catch these before submission.
-- **Visual generation can fail.** If `blotato_get_visual_status` returns `failed`, note it and proceed without a visual rather than blocking the whole session. Flag failed visuals clearly in the summary.
-- **`blotato_list_visual_templates` must succeed before generating visuals.** If it returns no templates, skip visual generation for the entire session and note it in the summary. Do not attempt to call `blotato_create_visual` without a valid template ID.
-- **Advanced tools** — `blotato_create_presigned_upload_url` is for uploading your own media files to attach to a post. `blotato_create_source` and `blotato_get_source_status` are for creating content sources. These are not used in the standard workflow but are available for operators who need them.
+- **Phase 0 is a hard stop by design.** Blotato disconnects produce confusing errors; the customer-roster gate prevents accidentally naming a customer who hasn't approved this month's mention. Both are intentional.
+- **Customer permission is not optional.** Even if a customer is named on statisfy.com or in last quarter's content, every social mention needs current month sign-off. The gate enforces this and protects Statisfy's customer relationships.
+- **Banned-phrase scan is a backstop, not a primary defence.** The platform writers should already block these. Publisher catches anything that slipped through.
+- **Blotato infographics ≠ Nano Banana brand photography.** Stat cards, frameworks, 3-step graphics, and quote graphics live here. Customer headshot overlays, product UI polish, and editorial generations live in `/social-creative-designer`.
+- **The approval gate in Phase 3 is non-optional.** Wrong platform, wrong account, wrong time — these mistakes are expensive on a B2B SaaS brand page. The gate exists to catch them.
+- **Failed visual generation is not a blocker.** Schedule the post without a visual rather than block the session. Flag in the summary.
+- **Held posts stay held.** Don't silently re-attempt a held post in the next run. The output file is annotated `HELD BY PUBLISHER` until permission is explicitly updated.
 
 ---
 
 ## Related Skills
 
-- `/linkedin-writer` — produces content for LinkedIn with BLOTATO FLAG fields
-- `/threads-writer` — produces content for Threads with BLOTATO FLAG fields
-- `/x-writer` — produces content for X with BLOTATO FLAG fields
-- `/caption-writer` — produces content for Instagram/Facebook/multi-platform
-- `/social-creative-designer` — generates brand photography and creatives (Nano Banana, not Blotato)
-- `/social-media-manager` — orchestrates via Route F (Platform-Specific Content → /publisher)
+- `/linkedin-writer` — Produces LinkedIn content with BLOTATO FLAG fields
+- `/x-writer` — Produces X content with BLOTATO FLAG fields
+- `/social-creative-designer` — Brand photography and product UI visuals (Nano Banana, not Blotato)
+- `/social-media-manager` — Orchestrates via Route F (Platform-Specific Content → /publisher)
